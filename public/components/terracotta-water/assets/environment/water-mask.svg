@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941">
+  <!-- Conservative hand-traced water coverage. White=water. Black protects baked flowers. -->
+  <rect width="1672" height="941" fill="black"/>
+  <g fill="white" stroke="black" stroke-width="8" stroke-linejoin="round">
+    <path d="M923 91 L1000 76 L1114 88 L1195 64 L1304 89 L1412 128 L1381 189 L1282 238 L1201 270 L1120 276 L1050 316 L1005 383 L952 439 L915 499 L924 541 L871 586 L817 649 L779 715 L738 773 L660 783 L615 757 L570 763 L472 816 L419 874 L385 909 L354 930 L295 941 L306 907 L367 840 L361 795 L409 749 L414 678 L404 642 L431 585 L437 529 L472 478 L536 450 L593 410 L624 355 L651 297 L709 260 L775 227 L835 201 L847 158 L885 137 Z"/>
+  </g>
+  <g fill="black">
+    <ellipse cx="1056" cy="49" rx="69" ry="45"/>
+    <ellipse cx="1218" cy="156" rx="66" ry="44"/>
+    <ellipse cx="1092" cy="229" rx="83" ry="62"/>
+    <ellipse cx="823" cy="257" rx="86" ry="62"/>
+    <ellipse cx="890" cy="355" rx="93" ry="59"/>
+    <ellipse cx="673" cy="496" rx="130" ry="94"/>
+    <ellipse cx="774" cy="624" rx="101" ry="73"/>
+    <ellipse cx="369" cy="692" rx="111" ry="81"/>
+    <ellipse cx="540" cy="677" rx="73" ry="71"/>
+    <path d="M365 829 L520 704 L552 694 L391 832 Z"/>
+    <path d="M684 767 L726 679 L751 666 L704 771 Z"/>
+    <path d="M754 329 L789 294 L804 291 L773 335 Z"/>
+  </g>
+</svg>

@@ -1,0 +1,42 @@
+# Installed dependencies
+node_modules/
+
+# Tool caches and temporary build data
+.vite/
+.cache/
+.npm/
+.hyperframes/
+.thumbnails/
+.hf-tmp/
+.sites-runtime/
+coverage/
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local environment files; keep shareable examples
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+# Logs, temporary files, and Blender backups
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*.blend1
+*.blend2
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Some projects use dist/ as their checked-in source, so do not ignore it here.

@@ -1,0 +1,13 @@
+{
+  "name": "little-fizz",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5188",
+    "build": "vite build",
+    "test": "node --test src/ice-physics.test.js",
+    "preview": "vite preview --host 127.0.0.1 --port 4188"
+  },
+  "devDependencies": { "vite": "^7.1.0" }
+}

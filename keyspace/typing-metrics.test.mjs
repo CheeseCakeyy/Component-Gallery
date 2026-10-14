@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import { createTypingMetrics } from './dist/typing-metrics.js';
+
+const metrics = createTypingMetrics();
+assert.equal(metrics.sample(0).pace, 0);
+metrics.record(.1, true);
+metrics.record(.2, false);
+metrics.record(.3, true);
+assert.equal(metrics.sample(1).pace, 24);
+assert.equal(metrics.sample(1).totalErrors, 1);
+assert.equal(metrics.sample(1).points[0].errors, 1);
+assert.equal(metrics.sample(2).pace, 12);
+assert.equal(metrics.sample(2).drop, 12, 'A pause in typing produces a measurable WPM drop');
+metrics.record(2.5, true);
+assert.equal(metrics.sample(3).totalErrors, 1, 'Correcting a mistake does not erase its history');
+assert.equal(metrics.sample(8).pace, 0, 'The five-second window expires old keystrokes');
+const beforePause = metrics.sample(8);
+assert.deepEqual(metrics.sample(8), beforePause, 'Unchanged active time does not advance either chart');
+assert.equal(metrics.sample(90).points.length, 30, 'The chart retains a rolling 30-second view');
+metrics.reset();
+assert.deepEqual(metrics.sample(0), {points:[{second:0,pace:0,errors:0}],pace:0,drop:0,totalErrors:0});
+console.log('Typing metrics: 10 checks passed.');

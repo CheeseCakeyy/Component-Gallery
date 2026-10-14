@@ -1,0 +1,124 @@
+<!doctype html>
+<html><head><meta charset="UTF-8"></head><body><template>
+<style>
+    * { box-sizing: border-box; }
+    
+    #shelter-root, .scene { position:relative; width:736px; height:920px; overflow:hidden; }
+    .scene { position:absolute; inset:0; }
+    svg { display:block; width:736px; height:920px; }
+  </style>
+
+<div data-hf-id="hf-73it" id="shelter-root" data-composition-id="shelter-scene" data-start="0" data-duration="6" data-width="736" data-height="920">
+ <div data-hf-id="hf-q5ab" id="rain-scene" class="clip scene" data-start="0" data-duration="6" data-track-index="0">
+  <svg data-hf-id="hf-7svo" id="illustration" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 736 920" width="736" height="920" aria-label="An ink drawing of a shivering mouse sheltering under a leaf in gently windblown rain">
+   <defs data-hf-id="hf-mh0t">
+    <clippath data-hf-id="hf-9dz3" id="cloud-cut"><path data-hf-id="hf-p0iw" d="M125 65 H633 V206 L600 207 L584 230 L572 237 L558 255 L543 269 L524 270 L508 262 L495 254 L483 244 L469 249 L453 233 L445 226 L436 248 L421 270 L407 276 L396 274 L382 287 L366 291 L355 279 L342 291 L326 288 L312 280 L298 291 L289 299 L274 297 L263 282 L250 288 L232 305 L218 312 L204 316 L189 310 L175 311 L155 307 L132 305 Z" /></clippath>
+    <clippath data-hf-id="hf-eeki" id="leaf-cut"><path data-hf-id="hf-opv6" d="M202 580 C221 558 260 533 291 523 C327 513 365 518 395 532 C428 546 452 570 469 595 C483 616 493 642 510 673 L500 678 C479 633 458 596 425 580 C404 570 380 574 351 580 C332 584 317 574 298 570 C278 566 258 565 237 574 L210 586 Z" /></clippath>
+    <clippath data-hf-id="hf-tb6r" id="upright-cut"><path data-hf-id="hf-uczj" d="M501 675 C482 649 464 621 453 586 C444 559 443 524 433 485 C453 503 475 533 485 558 C497 590 494 629 508 670 Z M505 672 C498 650 502 632 525 618 C516 634 516 653 510 672 Z M502 672 L458 651 L477 654 L462 637 L482 647 L502 665 Z" /></clippath>
+    <clippath data-hf-id="hf-z8xh" id="mouse-cut"><path data-hf-id="hf-ibzd" d="M280 734 L292 725 L303 719 L314 705 L323 691 L331 685 L339 690 L340 695 L350 689 L360 689 L358 697 L354 710 L346 722 L353 733 L359 749 L364 775 C373 756 376 731 378 704 L382 698 L386 701 C385 733 377 771 364 786 L348 790 L326 789 L313 786 L306 779 L301 756 L292 748 L282 747 Z" /></clippath>
+    <clippath data-hf-id="hf-hukb" id="ground-cut"><path data-hf-id="hf-1one" d="M150 780 L208 771 L253 772 L278 778 L312 785 L353 786 L374 772 L395 768 L399 750 L403 731 L411 720 L434 712 L452 713 L454 699 L466 688 L468 679 L482 673 L502 667 L518 664 L534 665 L545 678 L551 704 L560 698 L571 698 L578 707 L579 717 L588 727 L594 782 L594 810 L150 810 Z" /></clippath>
+    <clippath data-hf-id="hf-h1bq" id="rain-boundary"><path data-hf-id="hf-ywm9" d="M158 294 L598 183 L591 782 L159 790 Z" /></clippath>
+   </defs>
+   <image data-hf-id="hf-3azq" id="paper" href="assets/paper.png" width="736" height="920" preserveAspectRatio="none" />
+   <g data-hf-id="hf-40ds" id="rain" clip-path="url(#rain-boundary)" fill="none" stroke="#343633" stroke-linecap="round" />
+   <g data-hf-id="hf-cwmu" id="cloud" clip-path="url(#cloud-cut)"><image data-hf-id="hf-2wl5" href="assets/original.png" width="736" height="920" /></g>
+   <g data-hf-id="hf-f1g5" id="plant" data-layout-allow-overflow="">
+    <g data-hf-id="hf-klxa" id="upright" clip-path="url(#upright-cut)"><image data-hf-id="hf-khfx" href="assets/original.png" width="736" height="920" /></g>
+    <g data-hf-id="hf-uobm" id="leaf" clip-path="url(#leaf-cut)"><image data-hf-id="hf-lod0" href="assets/original.png" width="736" height="920" /></g>
+   </g>
+   <g data-hf-id="hf-znfg" id="drips" fill="none" stroke="#42443f" stroke-linecap="round" />
+   <g data-hf-id="hf-lt0a" id="mouse" clip-path="url(#mouse-cut)"><image data-hf-id="hf-la1z" href="assets/original.png" width="736" height="920" /></g>
+   <g data-hf-id="hf-qsik" id="ground" clip-path="url(#ground-cut)"><image data-hf-id="hf-mgz2" href="assets/original.png" width="736" height="920" /></g>
+   <g data-hf-id="hf-sbpv" id="splashes" fill="none" stroke="#444640" stroke-width="0.85" stroke-linecap="round" />
+  </svg>
+ </div>
+</div>
+<script>
+  const TAU = Math.PI * 2;
+  const NS = 'http://www.w3.org/2000/svg';
+  const rain = document.getElementById('rain');
+  const leaf = document.getElementById('leaf');
+  const upright = document.getElementById('upright');
+  const mouse = document.getElementById('mouse');
+  const phase = { t: 0 };
+  const fract = n => n - Math.floor(n);
+  const hash = n => fract(Math.sin(n * 127.1 + 311.7) * 43758.5453);
+  const lerp = (a,b,v) => a + (b-a)*v;
+  const canopy = [[157,307],[192,309],[222,303],[257,281],[283,295],[310,276],[340,285],[365,284],[395,264],[420,266],[445,224],[472,245],[492,249],[524,263],[544,261],[567,236],[593,208]];
+  const leafEdge = [[198,585],[221,559],[258,535],[290,523],[324,520],[358,523],[391,534],[421,550],[447,573],[470,606],[495,652]];
+  function atCurve(points,x) {
+    for(let i=1;i<points.length;i++) if(x<=points[i][0]) return lerp(points[i-1][1],points[i][1],(x-points[i-1][0])/(points[i][0]-points[i-1][0]));
+    return points[points.length-1][1];
+  }
+  const drops=[];
+  for(let i=0;i<2450;i++) {
+    const line=document.createElementNS(NS,'path');
+    const x=161+hash(i+7)*431;
+    line.setAttribute('stroke-width',(0.62+hash(i+803)*0.63).toFixed(2));
+    line.setAttribute('opacity',(0.52+hash(i+501)*0.34).toFixed(2));
+    rain.appendChild(line);
+    drops.push({line,x,offset:hash(i+2301),length:5+hash(i+607)*16,cycles:1+Math.floor(hash(i+77)*2),jitter:(hash(i+605)-.5)*1.1});
+  }
+  const dripNodes=Array.from({length:4},()=>{
+    const p=document.createElementNS(NS,'path');p.setAttribute('stroke-width','1.1');document.getElementById('drips').appendChild(p);return p;
+  });
+  const splashNodes=Array.from({length:20},()=>{
+    const p=document.createElementNS(NS,'path');document.getElementById('splashes').appendChild(p);return p;
+  });
+  function shiver(t,center,width) {
+    const distance=Math.abs(t-center);
+    if(distance>=width)return 0;
+    return Math.pow(Math.cos(distance/width*Math.PI/2),2);
+  }
+  function draw(t) {
+    const p=t/6*TAU;
+    const breeze=Math.sin(p)+.3*Math.sin(2*p);
+    const tipDip=.24*Math.sin(6*p)*Math.pow(.5+.5*Math.sin(2*p),4);
+    const leafAngle=.88*breeze+tipDip;
+    const uprightAngle=.52*Math.sin(p-.3)+.15*Math.sin(3*p);
+    leaf.setAttribute('transform',`rotate(${leafAngle} 505 674)`);
+    upright.setAttribute('transform',`rotate(${uprightAngle} 505 674)`);
+    const cold=shiver(t,1.3,.48)+shiver(t,3.75,.55)+shiver(t,5.2,.28);
+    const shake=cold*(.72*Math.sin(TAU*13*t)+.24*Math.sin(TAU*19*t));
+    const breath=.0024*Math.sin(2*p);
+    mouse.setAttribute('transform',`translate(${shake} ${-.22*cold*Math.cos(TAU*17*t)}) translate(333 785) scale(${1+breath} ${1-breath}) rotate(${shake*.22}) translate(-333 -785)`);
+    for(const d of drops) {
+      const x=d.x+2.4*breeze;
+      const top=atCurve(canopy,d.x)-3;
+      const sheltered=d.x>201&&d.x<497;
+      const bottom=sheltered ? atCurve(leafEdge,d.x)+(d.x-505)*Math.sin(leafAngle*Math.PI/180)-3 : 781;
+      const span=600;
+      const progress=fract(d.offset+t/6*d.cycles);
+      const y=top+progress*(span+d.length)-d.length;
+      const end=Math.min(bottom,y+d.length);
+      const start=Math.max(top,y);
+      const slant=(.35+.55*Math.sin(p+.5))*d.length/15;
+      d.line.setAttribute('d',end>start?`M${x.toFixed(2)} ${start.toFixed(2)} Q${(x+slant*.45+d.jitter).toFixed(2)} ${((start+end)/2).toFixed(2)} ${(x+slant).toFixed(2)} ${end.toFixed(2)}`:'');
+    }
+    dripNodes.forEach((node,i)=>{
+      const q=fract(t/3+i*.27);
+      const visible=q<.34;
+      const angle=leafAngle*Math.PI/180;
+      const tipX=505+(207-505)*Math.cos(angle)-(580-674)*Math.sin(angle);
+      const tipY=674+(207-505)*Math.sin(angle)+(580-674)*Math.cos(angle);
+      const dy=190*Math.pow(q/.34,2);
+      node.setAttribute('d',visible?`M${tipX+q*9} ${tipY+dy+2} l.4 ${2+q*18}`:'');
+      node.setAttribute('opacity',visible?String(.62*(1-q/.34)):'0');
+    });
+    splashNodes.forEach((node,i)=>{
+      const q=fract(t/2+hash(i+590));
+      const x=i<10?165+hash(i+51)*36:551+hash(i+97)*34;
+      const y=780+hash(i+7)*8;
+      const u=q/.22;
+      node.setAttribute('d',q<.22?`M${x-3*u} ${y-3*Math.sin(u*Math.PI)} l-1.2 -2 M${x+3*u} ${y-2*Math.sin(u*Math.PI)} l1.2 -1.4`:'');
+      node.setAttribute('opacity',String(.55*(1-Math.min(u,1))));
+    });
+  }
+  const tl=gsap.timeline({paused:true});
+  tl.fromTo(phase,{t:0},{t:6,duration:6,ease:'none',onUpdate:()=>draw(phase.t)},0);
+  window.__timelines=window.__timelines||{};
+  window.__timelines['shelter-scene']=tl;
+  draw(0);
+</script>
+
+</template></body></html>

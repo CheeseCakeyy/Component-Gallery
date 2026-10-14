@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101114" />
+    <meta name="description" content="A field of floating playing cards. One of them is not like the others. An interactive card flip with synthesised sound." />
+    <title>Reverse — one of these is not a playing card</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="module" crossorigin src="/assets/index-Csk3v5oa.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Brle9Wts.css">
+  </head>
+  <body>
+    <main class="experience" id="experience">
+      <svg width="0" height="0" class="defs" aria-hidden="true">
+        <defs>
+          <symbol id="suit-h" viewBox="0 0 100 100"><path fill="currentColor" d="M50 90C47 86 6 60 6 33C6 18 17 8 30 8C40 8 47 14 50 22C53 14 60 8 70 8C83 8 94 18 94 33C94 60 53 86 50 90Z"/></symbol>
+          <symbol id="suit-d" viewBox="0 0 100 100"><path fill="currentColor" d="M50 3C60 20 72 36 88 50C72 64 60 80 50 97C40 80 28 64 12 50C28 36 40 20 50 3Z"/></symbol>
+          <symbol id="suit-s" viewBox="0 0 100 100"><path fill="currentColor" d="M50 4C58 20 92 38 92 60C92 74 82 82 71 82C63 82 57 78 54 72C55 82 59 90 66 96L34 96C41 90 45 82 46 72C43 78 37 82 29 82C18 82 8 74 8 60C8 38 42 20 50 4Z"/></symbol>
+          <symbol id="suit-c" viewBox="0 0 100 100"><g fill="currentColor"><circle cx="50" cy="27" r="19"/><circle cx="27" cy="57" r="19"/><circle cx="73" cy="57" r="19"/><path d="M40 38H60V62H40Z"/><path d="M46 56C46 74 42 86 33 96L67 96C58 86 54 74 54 56Z"/></g></symbol>
+          <symbol id="rev-arrows" viewBox="0 0 100 100"><g transform="rotate(45 50 50)"><path d="M54 74H38V46" fill="none" stroke="currentColor" stroke-width="12"/><polygon fill="currentColor" points="23,48 38,25 53,48"/><path d="M46 26H62V54" fill="none" stroke="currentColor" stroke-width="12"/><polygon fill="currentColor" points="47,52 62,75 77,52"/></g></symbol>
+          <symbol id="back-orn" viewBox="0 0 100 100"><g fill="none" stroke="#F7F4EC"><path d="M50 6L94 50L50 94L6 50Z" stroke-width="3"/><path d="M50 18L82 50L50 82L18 50Z" stroke-width="1.5"/><path d="M50 30L70 50L50 70L30 50Z" stroke-width="3"/><circle cx="50" cy="50" r="40" stroke-width="1.2" stroke-dasharray="2 4"/></g><circle cx="50" cy="50" r="6" fill="#F7F4EC"/><g fill="#F7F4EC"><circle cx="50" cy="12" r="2.5"/><circle cx="88" cy="50" r="2.5"/><circle cx="50" cy="88" r="2.5"/><circle cx="12" cy="50" r="2.5"/></g></symbol>
+        </defs>
+      </svg>
+
+      <div class="backdrop" aria-hidden="true"></div>
+      <div class="stage">
+        <div class="field" id="field"></div>
+      </div>
+      <div class="vignette" aria-hidden="true"></div>
+
+      <header class="top">
+        <div class="brand"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#rev-arrows"/></svg><span>Reverse</span></div>
+        <button type="button" class="sound" id="sound" aria-pressed="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="waves" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="cross" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+          <span id="sound-label">Sound on</span>
+        </button>
+      </header>
+
+      <div class="caption" id="caption" aria-live="polite">
+        <div class="cap first" data-state="idle">
+          <h1 class="cap-h">Every card is showing. Except one.</h1>
+          <p class="cap-s">Tap the face-down card in the middle.</p>
+        </div>
+      </div>
+
+      <template id="cap-idle">
+        <div class="cap late" data-state="idle">
+          <h1 class="cap-h">Every card is showing. Except one.</h1>
+          <p class="cap-s">Tap the face-down card in the middle.</p>
+        </div>
+      </template>
+      <template id="cap-reversed">
+        <div class="cap rev" data-state="reversed">
+          <h1 class="nou">No u<span class="dot">.</span></h1>
+          <p class="cap-s">It was never a playing card. Tap it again to undo.</p>
+        </div>
+      </template>
+    </main>
+  </body>
+</html>

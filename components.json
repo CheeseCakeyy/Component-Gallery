@@ -1,0 +1,100 @@
+{
+  "cherry-blossom": {
+    "title": "Blossom Water",
+    "subtitle": "Spring pool",
+    "description": "A pale spring pool under a cherry tree. Tap the water to make ripples, drop a stone, or pause the breeze and watch the petals settle.",
+    "tags": [
+      "canvas"
+    ],
+    "date": "2026-09-26",
+    "focus": "82% 40%"
+  },
+  "dragon-flight-preview": {
+    "title": "Dragonflight",
+    "subtitle": "Pixel skies",
+    "description": "A pixel dragon with a real 3D skeleton, drawn by a tiny software renderer. Orbit the camera to fly over forests and rivers or dip below the clouds into a starry sky.",
+    "tags": [
+      "pixel art",
+      "vanilla JS"
+    ],
+    "date": "2026-09-10"
+  },
+  "keyspace": {
+    "title": "Keyspace",
+    "subtitle": "Typing toy",
+    "description": "A field of keycaps that light up as you type, gather into a globe you can spin, then unfold into a keyboard for a typing test.",
+    "tags": [
+      "vanilla JS"
+    ],
+    "date": "2026-09-28"
+  },
+  "koi-pond": {
+    "title": "Stillwater",
+    "subtitle": "Koi sketchbook",
+    "description": "A quiet koi pond. The fish drift, react to your pointer and come over when you feed them. It's also packaged as a reusable React component.",
+    "tags": [
+      "pixi",
+      "react"
+    ],
+    "date": "2026-09-23"
+  },
+  "little-fizz": {
+    "title": "Little Fizz",
+    "subtitle": "Cola & ice",
+    "description": "A frosted ice puppy that follows your pointer through a glass of sparkling cola.",
+    "tags": [
+      "WebGL"
+    ],
+    "date": "2026-09-27",
+    "focus": "50% 22%"
+  },
+  "no-plan-calendar": {
+    "title": "No Plan Society",
+    "subtitle": "Paper calendar",
+    "description": "An interactive paper calendar built only from SVG, CSS and JavaScript. No WebGL, no dependencies.",
+    "tags": [
+      "SVG",
+      "vanilla JS"
+    ],
+    "date": "2026-09-27"
+  },
+  "rain-mouse": {
+    "title": "A little shelter",
+    "subtitle": "Ink loop",
+    "description": "A six-second ink loop: a little mouse shivers under a leaf while the wind carries the rain.",
+    "tags": [
+      "video",
+      "animation"
+    ],
+    "date": "2026-09-28"
+  },
+  "sea-of-fish": {
+    "title": "A Sea of Small Lives",
+    "subtitle": "Scroll story",
+    "description": "A scroll-driven illustrated story drawn live in marker and watercolour, from a hill of fish to a dive beneath the surface.",
+    "tags": [
+      "canvas",
+      "scroll"
+    ],
+    "date": "2026-10-10"
+  },
+  "terracotta-water": {
+    "title": "Layered Water Garden",
+    "subtitle": "Courtyard pools",
+    "description": "A sunlit terracotta courtyard with real water physics. The water only ripples inside the painted pools, and the flowers float.",
+    "tags": [
+      "three.js",
+      "shaders"
+    ],
+    "date": "2026-10-10"
+  },
+  "uno-reverse": {
+    "title": "Reverse",
+    "subtitle": "Card trick",
+    "description": "A field of floating playing cards, all face up except one. Flip it and it turns out to be an UNO Reverse, and the whole deck turns over.",
+    "tags": [
+      "three.js"
+    ],
+    "date": "2026-10-13"
+  }
+}

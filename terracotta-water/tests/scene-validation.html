@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Actual scene wave validation</title></head><body><pre id="result">Checking real assets and mask…</pre><script type="module">
+import * as THREE from 'three';
+import {sceneConfig,waterSettings} from '../src/config/scene.js';
+import {AssetLoader} from '../src/utils/AssetLoader.js';
+import {CoordinateMapper} from '../src/utils/CoordinateMapper.js';
+import {RippleSimulation} from '../src/water/RippleSimulation.js';
+import {createFlowers} from '../src/scene/Flowers.js';
+const loader=new AssetLoader(),assets=await loader.environment(sceneConfig.environment);
+const mapper=new CoordinateMapper(assets.width,assets.height),results=[];
+for(const definition of sceneConfig.flowers){
+ const sim=new RippleSimulation(mapper.aspect,assets.sampleMask,waterSettings);
+ sim.microHeight=()=>0;
+ const scene=new THREE.Scene(),flowers=await createFlowers(scene,[definition],loader,mapper,sim);
+ flowers.update(0);const mesh=scene.children.find(o=>o.renderOrder===3),base=mesh.position.clone();
+ const [u,v]=definition.uv;
+ let origin=[u-.023/mapper.aspect,v+.007];
+ if(assets.sampleMask(...origin)<.8)origin=[u+.023/mapper.aspect,v-.007];
+ const injected=sim.disturb(...origin,waterSettings.clickStrength);
+ let shift=0,turn=0;
+ for(let i=0;i<360;i++){sim.update(1/120);flowers.update(1/120);shift=Math.max(shift,mesh.position.distanceTo(base)*1080);turn=Math.max(turn,Math.abs(mesh.rotation.z-definition.rotation)*180/Math.PI);}
+ results.push({id:definition.id,water:assets.sampleMask(u,v),injected,peakMovementPx:Number(shift.toFixed(3)),peakTurnDegrees:Number(turn.toFixed(3))});
+ flowers.dispose();
+}
+document.querySelector('#result').textContent=JSON.stringify(results,null,2);document.body.dataset.ready='true';
+loader.dispose();
+</script></body></html>

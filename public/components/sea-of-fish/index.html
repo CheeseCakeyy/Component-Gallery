@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbf8f1" />
+    <title>A Sea of Small Lives</title>
+    <meta name="description" content="An illustrated, scroll-driven story: a sea made entirely of fish, a small red boat, and what turns together beneath the surface." />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="A Sea of Small Lives" />
+    <meta property="og:description" content="An illustrated, scroll-driven story: a sea made entirely of fish, a small red boat, and what turns together beneath the surface." />
+    <meta name="twitter:card" content="summary" />
+    <script>
+      // Pick the theme before first paint so dark mode doesn't flash cream (mirrors src/theme.js).
+      (function () {
+        var t = null;
+        try {
+          t = localStorage.getItem('sea-of-fish:theme');
+        } catch (e) {}
+        if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-DmfBdRIU.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DLt0cAUQ.css">
+  </head>
+  <body>
+    <canvas id="sea" aria-label="An illustrated sea made entirely of fish, with a small red boat"></canvas>
+    <canvas id="fish" aria-hidden="true"></canvas>
+    <canvas id="fx" aria-hidden="true"></canvas>
+    <div class="paper" aria-hidden="true"></div>
+
+    <main class="overlay">
+      <section class="copy copy--one">
+        <h1 class="title">A sea<br /><span class="of">~ of ~</span><br />small lives</h1>
+        <p>Look closer. The ocean is not water at all &mdash; it is ten thousand small hearts, all swimming the same way home.</p>
+      </section>
+      <svg class="copy copy--arc" aria-hidden="true"></svg>
+
+      <section class="copy copy--two">
+        <h2 class="title">Steady <span class="of">~ the ~</span> boat</h2>
+        <p>We are carried by what we cannot see. Every swell beneath the hull is someone, swimming.</p>
+      </section>
+
+      <section class="copy copy--three">
+        <h2 class="title">Beneath<br /><span class="of">~ the ~</span><br />surface</h2>
+      </section>
+
+      <aside class="copy copy--quote">
+        &ldquo;Down here nobody swims alone. We turn together, and the turning keeps us safe.&rdquo;
+        <span>&mdash; the deep, 4:19</span>
+      </aside>
+
+      <footer class="copy copy--foot">a sea of small lives</footer>
+    </main>
+
+    <div class="hint" aria-hidden="true">
+      <span>scroll to set sail</span>
+      <svg viewBox="0 0 24 40" width="16" height="28"><path d="M12 2 C 11 14, 13 24, 12 36 M5 29 C 8 32, 10 34, 12 37 C 14 34, 16 32, 19 29" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </div>
+
+    <nav class="dots" aria-label="Pages">
+      <button type="button" data-to="0" aria-label="The sea of fish"></button>
+      <button type="button" data-to="0.54" aria-label="The boat"></button>
+      <button type="button" data-to="1" aria-label="Beneath the surface"></button>
+    </nav>
+
+    <button type="button" class="theme-toggle" aria-pressed="false" aria-label="Switch to dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M19.5 14.6A7.8 7.8 0 0 1 9.4 4.5a7.9 7.9 0 1 0 10.1 10.1Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+    </button>
+
+    <div class="track" aria-hidden="true"></div>
+  </body>
+</html>

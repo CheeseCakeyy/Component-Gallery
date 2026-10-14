@@ -1,0 +1,143 @@
+{
+  "count": 10,
+  "items": [
+    {
+      "title": "Reverse",
+      "subtitle": "Card trick",
+      "description": "A field of floating playing cards, all face up except one. Flip it and it turns out to be an UNO Reverse, and the whole deck turns over.",
+      "tags": [
+        "three.js"
+      ],
+      "date": "2026-10-13",
+      "slug": "uno-reverse",
+      "kind": "interactive",
+      "url": "components/uno-reverse/",
+      "thumb": "thumbs/uno-reverse.png?v=1791915992941"
+    },
+    {
+      "title": "A Sea of Small Lives",
+      "subtitle": "Scroll story",
+      "description": "A scroll-driven illustrated story drawn live in marker and watercolour, from a hill of fish to a dive beneath the surface.",
+      "tags": [
+        "canvas",
+        "scroll"
+      ],
+      "date": "2026-10-10",
+      "slug": "sea-of-fish",
+      "kind": "interactive",
+      "url": "components/sea-of-fish/",
+      "thumb": "thumbs/sea-of-fish.png?v=1791917097192"
+    },
+    {
+      "title": "Layered Water Garden",
+      "subtitle": "Courtyard pools",
+      "description": "A sunlit terracotta courtyard with real water physics. The water only ripples inside the painted pools, and the flowers float.",
+      "tags": [
+        "three.js",
+        "shaders"
+      ],
+      "date": "2026-10-10",
+      "slug": "terracotta-water",
+      "kind": "interactive",
+      "url": "components/terracotta-water/",
+      "thumb": "thumbs/terracotta-water.png?v=1790917984295"
+    },
+    {
+      "title": "A little shelter",
+      "subtitle": "Ink loop",
+      "description": "A six-second ink loop: a little mouse shivers under a leaf while the wind carries the rain.",
+      "tags": [
+        "video",
+        "animation"
+      ],
+      "date": "2026-09-28",
+      "slug": "rain-mouse",
+      "kind": "interactive",
+      "url": "components/rain-mouse/",
+      "thumb": "thumbs/rain-mouse.png?v=1790586204208"
+    },
+    {
+      "title": "Keyspace",
+      "subtitle": "Typing toy",
+      "description": "A field of keycaps that light up as you type, gather into a globe you can spin, then unfold into a keyboard for a typing test.",
+      "tags": [
+        "vanilla JS"
+      ],
+      "date": "2026-09-28",
+      "slug": "keyspace",
+      "kind": "interactive",
+      "url": "components/keyspace/",
+      "thumb": "thumbs/keyspace.png?v=1790521158477"
+    },
+    {
+      "title": "Little Fizz",
+      "subtitle": "Cola & ice",
+      "description": "A frosted ice puppy that follows your pointer through a glass of sparkling cola.",
+      "tags": [
+        "WebGL"
+      ],
+      "date": "2026-09-27",
+      "focus": "50% 22%",
+      "slug": "little-fizz",
+      "kind": "interactive",
+      "url": "components/little-fizz/",
+      "thumb": "thumbs/little-fizz.png?v=1791918784445"
+    },
+    {
+      "title": "No Plan Society",
+      "subtitle": "Paper calendar",
+      "description": "An interactive paper calendar built only from SVG, CSS and JavaScript. No WebGL, no dependencies.",
+      "tags": [
+        "SVG",
+        "vanilla JS"
+      ],
+      "date": "2026-09-27",
+      "slug": "no-plan-calendar",
+      "kind": "interactive",
+      "url": "components/no-plan-calendar/",
+      "thumb": "thumbs/no-plan-calendar.png?v=1790451409637"
+    },
+    {
+      "title": "Blossom Water",
+      "subtitle": "Spring pool",
+      "description": "A pale spring pool under a cherry tree. Tap the water to make ripples, drop a stone, or pause the breeze and watch the petals settle.",
+      "tags": [
+        "canvas"
+      ],
+      "date": "2026-09-26",
+      "focus": "82% 40%",
+      "slug": "cherry-blossom",
+      "kind": "interactive",
+      "url": "components/cherry-blossom/",
+      "thumb": "thumbs/cherry-blossom.png?v=1791918790589"
+    },
+    {
+      "title": "Stillwater",
+      "subtitle": "Koi sketchbook",
+      "description": "A quiet koi pond. The fish drift, react to your pointer and come over when you feed them. It's also packaged as a reusable React component.",
+      "tags": [
+        "pixi",
+        "react"
+      ],
+      "date": "2026-09-23",
+      "slug": "koi-pond",
+      "kind": "interactive",
+      "url": "components/koi-pond/",
+      "thumb": "thumbs/koi-pond.png?v=1791917107136"
+    },
+    {
+      "title": "Dragonflight",
+      "subtitle": "Pixel skies",
+      "description": "A pixel dragon with a real 3D skeleton, drawn by a tiny software renderer. Orbit the camera to fly over forests and rivers or dip below the clouds into a starry sky.",
+      "tags": [
+        "pixel art",
+        "vanilla JS"
+      ],
+      "date": "2026-09-10",
+      "slug": "dragon-flight-preview",
+      "kind": "interactive",
+      "url": "components/dragon-flight-preview/",
+      "thumb": "thumbs/dragon-flight-preview.png?v=1789056530501"
+    }
+  ]
+}

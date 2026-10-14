@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e6e6eb">
+  <meta name="description" content="A quiet pool beneath a cherry blossom tree. Touch the water, send out ripples, and watch the petals drift.">
+  <title>Blossom Water — a moment of spring</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="./assets/blossom-scene.webp">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main id="experience" data-state="loading">
+    <div class="scene" aria-hidden="true">
+      <img id="backdrop" src="./assets/blossom-scene.webp" alt="">
+      <canvas id="water"></canvas>
+      <canvas id="petals"></canvas>
+    </div>
+    <div class="reading-light" aria-hidden="true"></div>
+    <section class="intro" aria-labelledby="title">
+      <h1 id="title">Blossom Water</h1>
+      <p>A still pool beneath a cherry blossom tree. Touch it and it answers: rings spread, the light bends, and falling petals ride the ripples.</p>
+      <div class="actions">
+        <button id="stone" type="button">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" opacity=".24"/><circle cx="12" cy="12" r="6.5" stroke="currentColor" opacity=".56"/><circle cx="12" cy="12" r="2.8" fill="currentColor"/></svg>
+          Drop a stone
+        </button>
+        <button id="pause" class="text-button" type="button" aria-pressed="false">Pause breeze</button>
+      </div>
+      <p id="status" class="sr-only" role="status" aria-live="polite"></p>
+    </section>
+    <span class="hint" aria-hidden="true">A moment of spring</span>
+    <noscript><p class="no-script">Turn on JavaScript to stir the water and watch the petals fall.</p></noscript>
+  </main>
+  <script type="module" src="./scene.js"></script>
+</body>
+</html>

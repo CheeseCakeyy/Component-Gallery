@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Development mask registration check</title>
+<style>html,body{margin:0;overflow:hidden}canvas{position:fixed;inset:0;width:100%;height:100%}</style></head>
+<body><canvas></canvas><script type="module">
+// Development-only inspection page; not a Vite production entry or visible app UI.
+import {sceneConfig} from '../src/config/scene.js';
+import {CoordinateMapper} from '../src/utils/CoordinateMapper.js';
+const load=src=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=src;});
+const [image,mask]=await Promise.all([load(sceneConfig.environment.image),load(sceneConfig.environment.waterMask)]);
+const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d');
+const tint=document.createElement('canvas');tint.width=mask.width;tint.height=mask.height;
+const tc=tint.getContext('2d');tc.drawImage(mask,0,0);const pixels=tc.getImageData(0,0,mask.width,mask.height);
+for(let i=0;i<pixels.data.length;i+=4){const wet=pixels.data[i];pixels.data[i]=0;pixels.data[i+1]=220;pixels.data[i+2]=255;pixels.data[i+3]=wet*.42;}
+tc.putImageData(pixels,0,0);
+const mapper=new CoordinateMapper(image.width,image.height);
+function draw(){canvas.width=innerWidth;canvas.height=innerHeight;mapper.resize(innerWidth,innerHeight);ctx.drawImage(image,mapper.offsetX,mapper.offsetY,mapper.drawWidth,mapper.drawHeight);ctx.drawImage(tint,mapper.offsetX,mapper.offsetY,mapper.drawWidth,mapper.drawHeight);}
+addEventListener('resize',draw);draw();
+</script></body></html>

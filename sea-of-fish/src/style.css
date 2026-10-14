@@ -1,0 +1,369 @@
+:root {
+  --paper: #fbf8f1;
+  --ink: #1d2838;
+  --ink-soft: #33445e;
+  --deep: #1f4f8f;
+  --muted: #6f7a8c;
+  --hand: 'Amatic SC', 'Caveat', cursive;
+  --script: 'Caveat', cursive;
+  color-scheme: light;
+}
+
+/* Night: deep-ink water and chalky cream lines. Canvas colours live in src/theme.js. */
+:root[data-theme='dark'] {
+  --paper: #0e1626;
+  --ink: #ebe4d2;
+  --ink-soft: #b9c4d6;
+  --deep: #9fd1f5;
+  --muted: #8592a8;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--script);
+  overscroll-behavior: none;
+}
+
+body {
+  cursor: crosshair;
+}
+
+#sea,
+#fish,
+#fx {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.paper {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+
+/* On dark water the grain lifts instead of darkens. */
+:root[data-theme='dark'] .paper {
+  mix-blend-mode: screen;
+  opacity: 0.06;
+}
+
+.track {
+  height: 1000vh; /* set from SECTIONS in main.js */
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.copy {
+  --v: 0;
+  position: absolute;
+  opacity: var(--v);
+  transform: translateY(calc((1 - var(--v)) * 18px));
+  filter: blur(calc((1 - var(--v)) * 3px));
+}
+
+.title {
+  margin: 0;
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: clamp(40px, min(7vw, 11vh), 104px);
+  line-height: 0.86;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+.of {
+  display: inline-block;
+  font-family: var(--script);
+  font-weight: 400;
+  font-size: 0.34em;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  transform: translateY(-0.35em);
+}
+
+.copy p {
+  margin: 0.9em 0 0;
+  font-size: clamp(19px, 1.65vw, 25px);
+  text-shadow:
+    0 0 6px var(--paper),
+    0 0 3px var(--paper),
+    0 0 1px var(--paper);
+  line-height: 1.2;
+  color: var(--ink-soft);
+}
+
+.copy--one {
+  top: clamp(22px, 6vh, 64px);
+  left: clamp(16px, 5vw, 76px);
+  max-width: min(340px, 32vw);
+}
+
+/* Landscape: the words are drawn along the hill's rim (src/arcCopy.js); the block stays
+   for screen readers only. */
+.copy--one.is-curved {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.copy--arc {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.arc-title {
+  font-family: var(--hand);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  fill: var(--ink);
+}
+
+.arc-of {
+  font-family: var(--script);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+.arc-body {
+  font-family: var(--script);
+  fill: var(--ink-soft);
+}
+
+.copy--two {
+  top: clamp(22px, 6vh, 64px);
+  right: clamp(16px, 5vw, 76px);
+  max-width: min(340px, 32vw);
+  text-align: right;
+}
+
+.copy--three {
+  left: 50%;
+  top: 48%;
+  transform: translate(-50%, calc(-50% + (1 - var(--v)) * 18px));
+  text-align: center;
+}
+
+.copy--three .title {
+  color: var(--deep);
+  font-size: clamp(42px, 6vw, 88px);
+}
+
+.copy--quote {
+  right: clamp(16px, 6vw, 90px);
+  bottom: clamp(48px, 10vh, 110px);
+  max-width: 270px;
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: clamp(19px, 1.7vw, 25px);
+  line-height: 1.15;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-shadow:
+    0 0 8px var(--paper),
+    0 0 3px var(--paper);
+}
+
+.copy--quote span {
+  display: block;
+  margin-top: 0.5em;
+}
+
+.copy--foot {
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  text-align: center;
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hint {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  z-index: 3;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 20px;
+  color: var(--ink-soft);
+  text-shadow: 0 0 6px var(--paper), 0 0 2px var(--paper);
+  pointer-events: none;
+}
+
+.hint svg {
+  animation: bob 1.8s ease-in-out infinite;
+}
+
+@keyframes bob {
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+.dots {
+  position: fixed;
+  right: clamp(10px, 2vw, 24px);
+  top: 50%;
+  z-index: 3;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dots button {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 1.3px solid var(--ink);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    transform 0.3s;
+}
+
+.dots button:hover {
+  transform: scale(1.25);
+}
+
+.dots button.is-active {
+  background: var(--ink);
+}
+
+.dots button:focus-visible {
+  outline: 2px solid var(--deep);
+  outline-offset: 3px;
+}
+
+/* Sun / moon switch, bottom-left (the only free corner on every page). */
+.theme-toggle {
+  position: fixed;
+  left: clamp(10px, 2vw, 24px);
+  bottom: 16px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1.3px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    transform 0.3s,
+    background 0.4s,
+    color 0.4s,
+    border-color 0.4s;
+}
+
+.theme-toggle:hover {
+  transform: rotate(-15deg) scale(1.08);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--deep);
+  outline-offset: 3px;
+}
+
+.theme-toggle svg {
+  grid-area: 1 / 1;
+  transition:
+    opacity 0.35s,
+    transform 0.5s;
+}
+
+/* Show the mode you would switch to. */
+.theme-toggle .icon-sun,
+:root[data-theme='dark'] .theme-toggle .icon-moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+}
+
+:root[data-theme='dark'] .theme-toggle .icon-sun {
+  opacity: 1;
+  transform: none;
+}
+
+/* Cross-fade sheet in the old paper colour (added by main.js on switch). */
+.theme-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  animation: veil 0.6s ease-out forwards;
+}
+
+@keyframes veil {
+  to {
+    opacity: 0;
+  }
+}
+
+body {
+  transition:
+    background 0.4s,
+    color 0.4s;
+}
+
+@media (max-width: 700px) {
+  .copy--one,
+  .copy--two {
+    max-width: calc(100vw - 48px);
+  }
+
+  .copy--quote {
+    left: 16px;
+    right: 16px;
+    max-width: none;
+    text-align: center;
+  }
+
+  .dots {
+    right: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hint svg {
+    animation: none;
+  }
+}

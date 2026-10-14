@@ -1,0 +1,16 @@
+{
+  "name": "component-library",
+  "private": true,
+  "type": "module",
+  "description": "A showcase page for all my random components and pages.",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "add": "node scripts/add.mjs",
+    "sync": "node scripts/sync.mjs",
+    "thumbs": "node scripts/thumbs.mjs",
+    "build": "node scripts/sync.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f7f3">
+  <title>No plan Society — A little company, every day.</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="masthead"><a href="./" aria-label="No plan Society home">NPS<span>®</span></a><span>A LITTLE COMPANY, EVERY DAY.</span><span class="edition">EST. TODAY</span></header>
+  <main>
+    <div class="issue"><span class="dot"></span> THE ART OF TAKING IT EASY <span class="issue-number">№ 001</span></div>
+    <section class="poster" aria-label="No plan Society daily calendar">
+      <h1><span>No plan</span><span>Society<span class="period">.</span></span></h1>
+      <div class="title-rule"></div>
+      <div class="drawing-wrap">
+        <svg id="calendar" viewBox="0 0 560 365" role="img" aria-labelledby="drawing-title drawing-description">
+          <title id="drawing-title">A little friend peeking through the week</title>
+          <desc id="drawing-description">Seven paper strips, one for each day. A curious character peeks out of the selected day.</desc>
+          <g id="art"></g>
+        </svg>
+        <div id="day-buttons" class="day-buttons" role="group" aria-label="Choose a day this week"></div>
+      </div>
+      <p class="caption" id="caption">No plans. Just peeking.</p>
+    </section>
+    <section class="date-control" aria-label="Calendar navigation">
+      <button class="arrow" id="previous" aria-label="Previous day">←</button>
+      <label class="date-label"><span class="overline" id="relative">TODAY, IN NO PARTICULAR HURRY</span><span class="date-text" id="date-text"></span><input id="date-picker" type="date" aria-label="Choose calendar date"></label>
+      <button class="arrow" id="next" aria-label="Next day">→</button>
+    </section>
+    <button class="today-button" id="today">Back to today <span>↗</span></button>
+    <div class="sr-only" id="announcement" aria-live="polite"></div>
+  </main>
+  <footer><span>SEVEN DAYS. ZERO OBLIGATIONS.</span><span class="footer-hint">Pick a day. Say hello. <span>↗</span></span><span>MAKE ROOM FOR NOTHING.</span></footer>
+  <script type="module" src="./main.js?v=2"></script>
+</body>
+</html>

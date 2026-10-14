@@ -1,0 +1,21 @@
+{
+  "name": "sea-of-fish",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5191",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4191"
+  },
+  "devDependencies": {
+    "vite": "^7.3.7"
+  },
+  "dependencies": {
+    "@fontsource/amatic-sc": "^5.3.0",
+    "@fontsource/caveat": "^5.3.0"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

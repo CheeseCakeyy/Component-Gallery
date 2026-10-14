@@ -1,0 +1,5 @@
+# Build output (Vercel builds it from source)
+dist/
+
+# Vercel CLI project link
+.vercel/

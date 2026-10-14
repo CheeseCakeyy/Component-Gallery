@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Random Components</title>
+<meta name="description" content="A wall of small interactive experiments: components, pages and loops.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23a78bfa'/><stop offset='1' stop-color='%236d28d9'/></linearGradient></defs><rect x='4' y='4' width='24' height='24' rx='5' fill='url(%23g)'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>
+  try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}
+</script>
+</head>
+<body>
+<div class="room" id="room">
+
+  <header class="topbar">
+    <div class="status">
+      <span id="today"></span>
+      <span class="status-item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 9.1 4.5 4.5 0 0 0 7 18z"/><path d="M12 3v1.5M5.6 5.6l1 1M18.4 5.6l-1 1"/></svg>
+        <span id="pieces">—</span>
+      </span>
+    </div>
+    <nav class="menu" aria-label="Main">
+      <button type="button" class="menu-link is-active" id="nav-wall">Wall</button>
+      <button type="button" class="menu-link" id="nav-index" aria-expanded="false" aria-controls="index-panel">Index</button>
+      <button type="button" class="menu-link" id="nav-theme"><span class="when-light">Night</span><span class="when-dark">Day</span></button>
+      <button type="button" class="menu-icon" id="nav-home" aria-label="Back to the start">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5"/><path d="M6.5 10v9h11v-9"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <div class="index-panel" id="index-panel" hidden>
+    <ol id="index-list"></ol>
+  </div>
+
+  <!-- the wall -->
+  <section class="track" id="track" aria-label="Components" aria-roledescription="carousel"></section>
+
+  <!-- an opened piece -->
+  <div class="panel" id="panel" aria-hidden="true">
+    <div class="stage" id="stage">
+      <img id="stage-img" alt="">
+    </div>
+    <div class="panel-title" id="panel-title">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 21V4"/><path d="M7 4.5h10l-2.2 3.2L17 11H7"/></svg>
+      <h2 id="panel-name"></h2>
+      <p id="panel-sub"></p>
+    </div>
+    <div class="panel-side" id="panel-side">
+      <div class="label label-a">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5 20 19H4z"/></svg>
+        <strong id="panel-num"></strong>
+        <span id="panel-date"></span>
+      </div>
+      <div class="label label-b">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.2"/></svg>
+        <strong id="panel-tags"></strong>
+        <span>Built with</span>
+      </div>
+      <p class="panel-desc" id="panel-desc"></p>
+      <button type="button" class="plus" id="panel-open" aria-label="Open full screen">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- the furniture -->
+  <svg class="desk" id="desk" viewBox="96 212 308 156" aria-hidden="true" preserveAspectRatio="xMidYMax meet">
+    <defs>
+      <linearGradient id="g-front" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--desk-front-a)"/><stop offset="1" stop-color="var(--desk-front-b)"/>
+      </linearGradient>
+      <linearGradient id="g-leg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--leg-a)"/><stop offset="1" stop-color="var(--leg-b)"/>
+      </linearGradient>
+      <linearGradient id="g-under" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--shade)" stop-opacity=".5"/><stop offset="1" stop-color="var(--shade)" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="g-shell" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="var(--chair-edge)"/><stop offset=".22" stop-color="var(--chair-mid)"/>
+        <stop offset=".55" stop-color="var(--chair-dark)"/><stop offset=".85" stop-color="var(--chair-mid)"/>
+        <stop offset="1" stop-color="var(--chair-edge)"/>
+      </linearGradient>
+      <linearGradient id="g-shell-v" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".10"/><stop offset=".35" stop-color="#fff" stop-opacity="0"/>
+        <stop offset="1" stop-color="#000" stop-opacity=".25"/>
+      </linearGradient>
+      <pattern id="p-mesh" width="2.1" height="2.1" patternUnits="userSpaceOnUse">
+        <circle cx="1.05" cy="1.05" r=".42" fill="#fff" fill-opacity=".07"/>
+      </pattern>
+      <linearGradient id="g-pot" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#f6cfb2"/><stop offset=".35" stop-color="#e6a07a"/>
+        <stop offset=".75" stop-color="#c5734c"/><stop offset="1" stop-color="#a95c3a"/>
+      </linearGradient>
+      <linearGradient id="g-leaf" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0" stop-color="#0d4f6b"/><stop offset=".6" stop-color="#1f7fa1"/><stop offset="1" stop-color="#4fb3cf"/>
+      </linearGradient>
+      <linearGradient id="g-leaf-2" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0" stop-color="#0b3f57"/><stop offset="1" stop-color="#2a8fb0"/>
+      </linearGradient>
+      <filter id="f-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter>
+      <filter id="f-softer" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+      <clipPath id="c-shell"><path d="M221 269.5Q248 263.5 275 269.5Q285 271.5 287 284L293.5 318Q296.5 331 285 336.5Q248 344.5 211 336.5Q199.5 331 202.5 318L209 284Q211 271.5 221 269.5Z"/></clipPath>
+    </defs>
+
+    <!-- soft shadow the desk throws on the wall -->
+    <rect x="116" y="284" width="264" height="22" fill="url(#g-under)"/>
+    <ellipse cx="248" cy="296" rx="120" ry="5" fill="var(--shade)" opacity=".25" filter="url(#f-softer)"/>
+
+    <!-- back legs -->
+    <path d="M128.6 287 L131.2 287 L126.4 368 L123.4 368Z" fill="var(--leg-back)"/>
+    <path d="M367.2 287 L369.8 287 L374.4 368 L371.4 368Z" fill="var(--leg-back)"/>
+
+    <!-- front trestle legs -->
+    <path d="M136 287 L139.4 287 L130.8 368 L127 368Z" fill="url(#g-leg)"/>
+    <path d="M144 287 L147.4 287 L159.6 368 L155.6 368Z" fill="url(#g-leg)"/>
+    <path d="M359 287 L362.4 287 L371.2 368 L367.4 368Z" fill="url(#g-leg)"/>
+    <path d="M351 287 L354.4 287 L342.6 368 L338.8 368Z" fill="url(#g-leg)"/>
+    <path d="M139.4 287 L144 287 L143.2 290.5 L139.9 290.5Z" fill="var(--leg-b)" opacity=".6"/>
+    <path d="M354.4 287 L359 287 L358.5 290.5 L355.2 290.5Z" fill="var(--leg-b)" opacity=".6"/>
+
+    <!-- desk top -->
+    <path d="M115.5 278.2 L380.5 278.2 L384 280.8 L112 280.8Z" fill="var(--desk-top)"/>
+    <rect x="112" y="280.6" width="272" height="6.6" rx=".8" fill="url(#g-front)"/>
+    <rect x="112.5" y="286.9" width="271" height=".9" fill="var(--shade)" opacity=".35"/>
+
+    <!-- plant shadow on the wall -->
+    <g opacity=".16" filter="url(#f-soft)" transform="translate(7 4)">
+      <ellipse cx="314" cy="244" rx="15" ry="20" fill="var(--shade)"/>
+    </g>
+
+    <!-- plant -->
+    <g class="plant">
+      <path d="M314 262 Q313 252 306.5 246" stroke="#2f6b54" stroke-width=".7" fill="none"/>
+      <path d="M314 262 Q315.5 251 321.5 244" stroke="#2f6b54" stroke-width=".7" fill="none"/>
+      <path d="M314 262 Q314 248 314.4 237" stroke="#2f6b54" stroke-width=".7" fill="none"/>
+      <path d="M314 262 Q309 257 301.5 255" stroke="#2f6b54" stroke-width=".7" fill="none"/>
+      <path d="M314 262 Q320 257 327 253.5" stroke="#2f6b54" stroke-width=".7" fill="none"/>
+      <ellipse cx="300" cy="254.5" rx="1.9" ry="7.8" transform="rotate(-62 300 254.5)" fill="url(#g-leaf-2)"/>
+      <ellipse cx="328.5" cy="252.5" rx="1.9" ry="7.8" transform="rotate(58 328.5 252.5)" fill="url(#g-leaf-2)"/>
+      <ellipse cx="305" cy="243" rx="2.3" ry="9.8" transform="rotate(-34 305 243)" fill="url(#g-leaf)"/>
+      <ellipse cx="323.5" cy="241" rx="2.3" ry="9.8" transform="rotate(32 323.5 241)" fill="url(#g-leaf)"/>
+      <ellipse cx="314.6" cy="232" rx="2.4" ry="10.6" transform="rotate(3 314.6 232)" fill="url(#g-leaf)"/>
+      <path d="M305 243 m-4.4 6.8 l8.8 -13.6" stroke="#bfe6f2" stroke-opacity=".35" stroke-width=".35"/>
+      <path d="M323.5 241 m4.4 6.8 l-8.8 -13.6" stroke="#bfe6f2" stroke-opacity=".35" stroke-width=".35"/>
+      <path d="M314.6 232 m-.5 9 l1 -18" stroke="#bfe6f2" stroke-opacity=".35" stroke-width=".35"/>
+      <!-- pot -->
+      <path d="M305.6 262.6 L322.4 262.6 Q323.4 274.6 314 278.6 Q304.6 274.6 305.6 262.6Z" fill="url(#g-pot)"/>
+      <ellipse cx="314" cy="262.7" rx="8.4" ry="1.5" fill="#9e5534"/>
+      <ellipse cx="314" cy="262.5" rx="7.6" ry="1" fill="#5c3424"/>
+      <path d="M308 265 Q307.6 271 310.5 275" stroke="#fff" stroke-opacity=".45" stroke-width=".9" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- chair (seen from behind) -->
+    <g class="chair">
+      <ellipse cx="248" cy="367" rx="44" ry="3" fill="var(--shade)" opacity=".35" filter="url(#f-soft)"/>
+      <path d="M223 337 L212.4 368 L215 368 L225.6 338Z" fill="var(--chair-leg)"/>
+      <path d="M273 337 L283.6 368 L281 368 L270.4 338Z" fill="var(--chair-leg)"/>
+      <path d="M238.5 339 L234.2 368 L236.8 368 L241 339.4Z" fill="var(--chair-leg)" opacity=".85"/>
+      <path d="M257.5 339 L261.8 368 L259.2 368 L255 339.4Z" fill="var(--chair-leg)" opacity=".85"/>
+      <path d="M219.5 354 L276.5 354" stroke="var(--chair-leg)" stroke-width=".8"/>
+      <path d="M224 352 L272 360 M272 352 L224 360" stroke="var(--chair-leg)" stroke-width=".55" opacity=".8"/>
+      <path d="M232 340.5 Q248 343 264 340.5 L264 343 Q248 345.5 232 343Z" fill="var(--chair-dark)"/>
+      <path d="M221 269.5Q248 263.5 275 269.5Q285 271.5 287 284L293.5 318Q296.5 331 285 336.5Q248 344.5 211 336.5Q199.5 331 202.5 318L209 284Q211 271.5 221 269.5Z" fill="url(#g-shell)"/>
+      <g clip-path="url(#c-shell)">
+        <rect x="198" y="260" width="100" height="90" fill="url(#p-mesh)"/>
+        <rect x="198" y="260" width="100" height="90" fill="url(#g-shell-v)"/>
+        <path d="M216 274 Q248 268 280 274" stroke="#fff" stroke-opacity=".14" stroke-width="1.2" fill="none"/>
+      </g>
+      <path d="M221 269.5Q248 263.5 275 269.5Q285 271.5 287 284L293.5 318Q296.5 331 285 336.5Q248 344.5 211 336.5Q199.5 331 202.5 318L209 284Q211 271.5 221 269.5Z" fill="none" stroke="var(--chair-rim)" stroke-width=".7"/>
+    </g>
+  </svg>
+
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <h1>Components</h1>
+    <p id="brand-sub">Scenes, Toys, Loops</p>
+  </div>
+
+  <p class="hint" id="hint" aria-hidden="true">drag, scroll or use ← →</p>
+</div>
+
+<!-- full-screen viewer -->
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewer-title" hidden>
+  <div class="viewer-bar">
+    <button class="vbtn" id="viewer-close" type="button" aria-label="Back to the wall (Esc)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>Wall</span>
+    </button>
+    <div class="viewer-title">
+      <span class="num" id="viewer-num"></span>
+      <h2 id="viewer-title"></h2>
+    </div>
+    <div class="viewer-actions">
+      <button class="vbtn icon" id="viewer-prev" type="button" aria-label="Previous (←)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <button class="vbtn icon" id="viewer-next" type="button" aria-label="Next (→)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      <a class="vbtn" id="viewer-open" target="_blank" rel="noopener"><span>New tab</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </div>
+  </div>
+  <div class="viewer-stage">
+    <div class="viewer-loading" id="viewer-loading"><span></span></div>
+    <iframe id="viewer-frame" title="Component" allow="fullscreen; autoplay; clipboard-write; accelerometer; gyroscope"></iframe>
+  </div>
+</div>
+
+<script src="app.js" type="module"></script>
+</body>
+</html>

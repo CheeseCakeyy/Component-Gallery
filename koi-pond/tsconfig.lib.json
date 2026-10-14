@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist-component/types"
+  },
+  "include": ["src/index.ts", "src/pond", "src/vite-env.d.ts"]
+}

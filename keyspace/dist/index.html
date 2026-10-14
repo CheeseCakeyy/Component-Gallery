@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f36b2c" />
+  <meta name="description" content="A little world at your fingertips. Play the keys, scroll to reshape them, and turn a globe made of your keyboard." />
+  <title>Keyspace — A world at your fingertips</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./style.css" />
+  <script src="./app.js" type="module"></script>
+</head>
+<body>
+  <main id="journey" aria-label="Interactive keyboard exploration">
+    <div class="stage">
+      <canvas id="world" aria-label="Interactive keys. Press your keyboard or tap a key to add color. Scroll to form a globe, then use arrow keys or drag to rotate it."></canvas>
+      <header>
+        <a class="wordmark" href="#" aria-label="Keyspace, back to start"><span class="brand-icon">k</span>keyspace<span class="brand-dot">®</span></a>
+        <span class="edition">AN EXPERIMENT IN PLAY</span>
+        <button class="stage-link" id="switch-stage" aria-label="Scroll to the keyboard globe"><span id="stage-number">01</span><span class="nav-line"></span><span id="stage-name">THE FIELD</span><span class="tiny-arrow">↗</span></button>
+      </header>
+      <section class="intro" aria-labelledby="intro-title">
+        <p class="eyebrow">A LITTLE CURIOSITY GOES A LONG WAY</p>
+        <h1 id="intro-title"><span class="desktop-title">A world at<br />your <em>fingertips.</em></span><span class="mobile-title">A<br />WORLD<br /><em>OF KEYS.</em></span></h1>
+        <p class="instructions">Press any key. Leave a little color.<br /> Scroll to see things differently.</p>
+        <button id="explore" class="explore">Take it for a spin <span>↘</span></button>
+      </section>
+      <section class="globe-copy" aria-labelledby="globe-title" inert>
+        <p class="eyebrow">SAME KEYS. A NEW PERSPECTIVE.</p>
+        <h2 id="globe-title">Small keys.<br /><em>Whole world.</em></h2>
+        <p class="instructions">Keep playing. There’s more than<br />one way to look at things.</p>
+      </section>
+      <div class="globe-controls" inert>
+        <span>TURN YOUR WORLD</span>
+        <div class="arrow-pad" aria-label="Rotate the globe">
+          <button data-direction="ArrowLeft" aria-label="Rotate globe left">←</button>
+          <button data-direction="ArrowUp" aria-label="Rotate globe up">↑</button>
+          <button data-direction="ArrowDown" aria-label="Rotate globe down">↓</button>
+          <button data-direction="ArrowRight" aria-label="Rotate globe right">→</button>
+        </div>
+        <small>or click & drag</small>
+      </div>
+      <div class="typing-scene" inert>
+      <section class="typing-room" aria-labelledby="typing-title">
+        <div class="typing-heading"><div><p class="eyebrow">LET YOUR FINGERS FIND THEIR WAY</p><h2 id="typing-title">Find your rhythm.</h2></div><button id="restart-typing" aria-label="Start a new typing exercise" title="New passage">↻</button></div>
+        <div class="typing-stats" aria-label="Typing statistics"><span><b id="typing-wpm">0</b> wpm</span><span><b id="typing-accuracy">100</b>% accuracy</span><span><b id="typing-time">0</b>s</span></div>
+        <div class="passage-wrap"><p id="typing-passage" aria-hidden="true"></p><textarea id="typing-input" aria-label="Type the passage" aria-describedby="typing-source typing-status" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea></div>
+        <p id="typing-source" class="sr-only"></p>
+        <p id="typing-status" role="status">Click the words or start typing. Backspace to correct.</p>
+      </section>
+      <aside class="typing-charts" aria-label="Live typing charts">
+        <div class="charts-heading"><span>YOUR RHYTHM, LIVE</span><span>LAST 30s</span></div>
+        <figure class="typing-chart"><figcaption><span>Typing errors</span><strong id="chart-error-total">0 <small>total</small></strong></figcaption><svg id="error-chart" viewBox="0 0 300 130" role="img" aria-label="Errors per second. No errors yet."></svg><p>Incorrect characters each second</p></figure>
+        <figure class="typing-chart"><figcaption><span>WPM drops</span><strong id="chart-wpm-drop">0 <small>wpm</small></strong></figcaption><svg id="pace-chart" viewBox="0 0 300 130" role="img" aria-label="Typing pace. Start typing to see changes."></svg><p>5-second pace · orange marks a drop</p></figure>
+      </aside>
+      <div class="keyboard-space" aria-hidden="true"></div>
+      </div>
+      <aside class="key-tracker" aria-label="Recent key presses">
+        <div class="tracker-toolbar"><span id="key-count">KEY TRAIL</span><button id="sound-toggle" aria-pressed="true" aria-label="Mute key sounds" title="Mute key sounds">♪</button><button id="clear-keys" aria-label="Clear key history" title="Clear key history">×</button></div>
+        <ol id="key-history" aria-label="Key press history"><li class="history-empty">Make a little noise.</li></ol>
+      </aside>
+      <footer>
+        <div class="live-note"><span class="live-dot"></span><span id="key-note" aria-live="polite">YOUR KEYBOARD IS THE CANVAS</span></div>
+        <button class="scroll-cue" id="scroll-cue">SCROLL TO TRANSFORM <span>↓</span></button>
+        <span class="page-count"><span id="page-count">01</span> / 03</span>
+      </footer>
+      <div class="progress-track" aria-hidden="true"><div id="progress"></div></div>
+    </div>
+  </main>
+  <noscript>This interactive keyboard needs JavaScript enabled.</noscript>
+</body>
+</html>

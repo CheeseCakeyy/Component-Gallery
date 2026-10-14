@@ -1,0 +1,19 @@
+{
+  "name": "uno-reverse",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5197",
+    "build": "vite build",
+    "test": "node --test src/deck.test.js",
+    "preview": "vite preview --host 127.0.0.1 --port 4197"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/playfair-display": "^5.3.0"
+  }
+}
