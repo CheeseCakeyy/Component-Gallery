@@ -1,6 +1,7 @@
 // Imports a project into public/components/<slug>/ so the showcase can host it.
 //
-//   npm run add -- <project-folder> [more folders...] [--slug name] [--rebuild]
+//   npm run add -- projects/<folder> [more folders...] [--slug name] [--rebuild]
+//   npm run add -- --all            re-import every folder in projects/
 //
 // What it picks up, in order:
 //   hyperframes.json / renders/*.mp4 -> wraps the rendered video in a small page
@@ -10,12 +11,13 @@
 //
 // Then it rewrites root-absolute paths ("/assets/x.js", url(/fonts/x.ttf), "/models/x.glb")
 // to relative ones, because the page is served from /components/<slug>/ and not from "/".
-// Your source project is never modified.
+// Your source project is never modified. Afterwards it makes the poster (npm run posters).
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { COMPONENTS_DIR, THUMBS_DIR, readContent, writeContent, titleFromSlug, sync } from './sync.mjs';
+import { ROOT, COMPONENTS_DIR, THUMBS_DIR, readContent, writeContent, titleFromSlug, sync } from './sync.mjs';
+import { makePosters, findBrowser } from './posters.mjs';
 
 // Never copied: tooling, OS junk, launch scripts.
 const SKIP_DIRS = new Set(['node_modules', '.git', '.vite', '.cache', '.claude', '.openai', '.hyperframes', '.thumbnails']);
@@ -29,21 +31,38 @@ const args = process.argv.slice(2);
 const flag = (name) => { const i = args.indexOf(name); return i === -1 ? null : args.splice(i, 2)[1] ?? true; };
 const slugArg = flag('--slug');
 const rebuild = args.includes('--rebuild') && args.splice(args.indexOf('--rebuild'), 1);
-const sources = args.filter((a) => !a.startsWith('--'));
+const PROJECTS_DIR = path.join(ROOT, 'projects');
+const sources = args.includes('--all')
+  ? fs.readdirSync(PROJECTS_DIR, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => path.join(PROJECTS_DIR, d.name))
+  : args.filter((a) => !a.startsWith('--'));
 
 if (!sources.length) {
-  console.log('Usage: npm run add -- <project-folder> [more folders...] [--slug name] [--rebuild]');
+  console.log('Usage: npm run add -- projects/<folder> [more folders...] [--slug name] [--rebuild]');
+  console.log('       npm run add -- --all');
   process.exit(1);
 }
 if (slugArg && sources.length > 1) { console.error('--slug only works with a single folder.'); process.exit(1); }
 
 let failures = 0;
+const imported = [];
 for (const src of sources) {
-  try { importProject(path.resolve(src), slugArg); }
+  try { imported.push({ src: path.resolve(src), slug: importProject(path.resolve(src), slugArg) }); }
   catch (err) { failures++; console.error(`✗ ${path.basename(src)}: ${err.message}`); }
 }
 console.log('');
 await sync();
+// Re-imports keep their artwork; `npm run posters -- <slug>` redoes one.
+const fresh = imported.filter(({ slug }) => !fs.existsSync(path.join(THUMBS_DIR, `${slug}.json`)));
+if (fresh.length) {
+  if (findBrowser()) {
+    console.log('\nMaking posters…');
+    failures += await makePosters(fresh.map((i) => i.slug));
+  } else {
+    console.log("\nNo Chrome or Edge found, so the poster is the project's preview image (if it has one).");
+    for (const { src, slug } of fresh) copyPreview(src, slug);
+    await sync({ quiet: true });
+  }
+}
 process.exit(failures ? 1 : 0);
 
 function importProject(src, slugOverride) {
@@ -82,9 +101,9 @@ function importProject(src, slugOverride) {
   }
 
   const rewrites = relativize(dest);
-  const thumb = copyPreview(src, slug);
   addContentStub(src, slug, deps, !!video && how === 'video wrapper');
-  console.log(`✓ ${slug}: ${how}${rewrites ? `, fixed ${rewrites} absolute path${rewrites > 1 ? 's' : ''}` : ''}${thumb ? `, thumbnail from ${thumb}` : ''}`);
+  console.log(`✓ ${slug}: ${how}${rewrites ? `, fixed ${rewrites} absolute path${rewrites > 1 ? 's' : ''}` : ''}`);
+  return slug;
 }
 
 function copyTree(from, to, isSourceRoot = false) {

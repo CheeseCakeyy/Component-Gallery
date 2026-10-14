@@ -9,10 +9,24 @@
         "three.js"
       ],
       "date": "2026-10-13",
+      "still": "thumbs/uno-reverse-stage.webp?v=1791963308229",
+      "poster": {
+        "bg": "#141414",
+        "ink": "light",
+        "kind": "scene"
+      },
+      "stage": {
+        "viewport": [
+          1280,
+          800
+        ],
+        "rect": null,
+        "pageBg": null
+      },
       "slug": "uno-reverse",
       "kind": "interactive",
       "url": "components/uno-reverse/",
-      "thumb": "thumbs/uno-reverse.png?v=1791915992941"
+      "thumb": "thumbs/uno-reverse.webp?v=1791963308229"
     },
     {
       "title": "A Sea of Small Lives",
@@ -23,10 +37,24 @@
         "scroll"
       ],
       "date": "2026-10-10",
+      "still": "thumbs/sea-of-fish-stage.webp?v=1791963200363",
+      "poster": {
+        "bg": "#f6f2e9",
+        "ink": "dark",
+        "kind": "scene"
+      },
+      "stage": {
+        "viewport": [
+          1280,
+          800
+        ],
+        "rect": null,
+        "pageBg": null
+      },
       "slug": "sea-of-fish",
       "kind": "interactive",
       "url": "components/sea-of-fish/",
-      "thumb": "thumbs/sea-of-fish.png?v=1791917097192"
+      "thumb": "thumbs/sea-of-fish.webp?v=1791963200363"
     },
     {
       "title": "Layered Water Garden",
@@ -37,10 +65,24 @@
         "shaders"
       ],
       "date": "2026-10-10",
+      "still": "thumbs/terracotta-water-stage.webp?v=1791962936720",
+      "poster": {
+        "bg": "#7d583c",
+        "ink": "light",
+        "kind": "scene"
+      },
+      "stage": {
+        "viewport": [
+          1280,
+          800
+        ],
+        "rect": null,
+        "pageBg": null
+      },
       "slug": "terracotta-water",
       "kind": "interactive",
       "url": "components/terracotta-water/",
-      "thumb": "thumbs/terracotta-water.png?v=1790917984295"
+      "thumb": "thumbs/terracotta-water.webp?v=1791962936719"
     },
     {
       "title": "A little shelter",
@@ -51,10 +93,40 @@
         "animation"
       ],
       "date": "2026-09-28",
+      "show": "video",
+      "viewport": [
+        1280,
+        960
+      ],
+      "trim": [
+        0,
+        0,
+        0.13,
+        0
+      ],
+      "still": "thumbs/rain-mouse-stage.webp?v=1791964209705",
+      "poster": {
+        "bg": "#e8e8e8",
+        "ink": "dark",
+        "kind": "scene"
+      },
+      "stage": {
+        "viewport": [
+          1280,
+          960
+        ],
+        "rect": [
+          272,
+          20,
+          640,
+          920
+        ],
+        "pageBg": null
+      },
       "slug": "rain-mouse",
       "kind": "interactive",
       "url": "components/rain-mouse/",
-      "thumb": "thumbs/rain-mouse.png?v=1790586204208"
+      "thumb": "thumbs/rain-mouse.webp?v=1791964209704"
     },
     {
       "title": "Keyspace",
@@ -64,10 +136,24 @@
         "vanilla JS"
       ],
       "date": "2026-09-28",
+      "still": "thumbs/keyspace-stage.webp?v=1791963325926",
+      "poster": {
+        "bg": "#eadfd3",
+        "ink": "dark",
+        "kind": "scene"
+      },
+      "stage": {
+        "viewport": [
+          1280,
+          800
+        ],
+        "rect": null,
+        "pageBg": null
+      },
       "slug": "keyspace",
       "kind": "interactive",
       "url": "components/keyspace/",
-      "thumb": "thumbs/keyspace.png?v=1790521158477"
+      "thumb": "thumbs/keyspace.webp?v=1791963325926"
     },
     {
       "title": "Little Fizz",
@@ -77,11 +163,24 @@
         "WebGL"
       ],
       "date": "2026-09-27",
-      "focus": "50% 22%",
+      "still": "thumbs/little-fizz-stage.webp?v=1791963715751",
+      "poster": {
+        "bg": "#d78533",
+        "ink": "light",
+        "kind": "scene"
+      },
+      "stage": {
+        "viewport": [
+          1280,
+          800
+        ],
+        "rect": null,
+        "pageBg": null
+      },
       "slug": "little-fizz",
       "kind": "interactive",
       "url": "components/little-fizz/",
-      "thumb": "thumbs/little-fizz.png?v=1791918784445"
+      "thumb": "thumbs/little-fizz.webp?v=1791963715750"
     },
     {
       "title": "No Plan Society",
@@ -92,10 +191,30 @@
         "vanilla JS"
       ],
       "date": "2026-09-27",
+      "show": ".drawing-wrap",
+      "still": "thumbs/no-plan-calendar-stage.webp?v=1791963719612",
+      "poster": {
+        "bg": "#f8f7f3",
+        "ink": "dark",
+        "kind": "object"
+      },
+      "stage": {
+        "viewport": [
+          1280,
+          800
+        ],
+        "rect": [
+          377,
+          357,
+          526,
+          363
+        ],
+        "pageBg": "rgb(248, 247, 243)"
+      },
       "slug": "no-plan-calendar",
       "kind": "interactive",
       "url": "components/no-plan-calendar/",
-      "thumb": "thumbs/no-plan-calendar.png?v=1790451409637"
+      "thumb": "thumbs/no-plan-calendar.webp?v=1791963719610"
     },
     {
       "title": "Blossom Water",
@@ -105,11 +224,24 @@
         "canvas"
       ],
       "date": "2026-09-26",
-      "focus": "82% 40%",
+      "still": "thumbs/cherry-blossom-stage.webp?v=1791963029416",
+      "poster": {
+        "bg": "#d7c8ca",
+        "ink": "dark",
+        "kind": "scene"
+      },
+      "stage": {
+        "viewport": [
+          1280,
+          800
+        ],
+        "rect": null,
+        "pageBg": null
+      },
       "slug": "cherry-blossom",
       "kind": "interactive",
       "url": "components/cherry-blossom/",
-      "thumb": "thumbs/cherry-blossom.png?v=1791918790589"
+      "thumb": "thumbs/cherry-blossom.webp?v=1791963029415"
     },
     {
       "title": "Stillwater",
@@ -120,10 +252,35 @@
         "react"
       ],
       "date": "2026-09-23",
+      "show": ".pond-frame",
+      "viewport": [
+        1280,
+        1040
+      ],
+      "ready": ".pond-frame.is-ready",
+      "still": "thumbs/koi-pond-stage.webp?v=1791964229683",
+      "poster": {
+        "bg": "#f5f1e8",
+        "ink": "dark",
+        "kind": "object"
+      },
+      "stage": {
+        "viewport": [
+          1280,
+          1040
+        ],
+        "rect": [
+          270,
+          139,
+          1010,
+          721
+        ],
+        "pageBg": "rgb(246, 242, 233)"
+      },
       "slug": "koi-pond",
       "kind": "interactive",
       "url": "components/koi-pond/",
-      "thumb": "thumbs/koi-pond.png?v=1791917107136"
+      "thumb": "thumbs/koi-pond.webp?v=1791964229682"
     },
     {
       "title": "Dragonflight",
@@ -134,10 +291,24 @@
         "vanilla JS"
       ],
       "date": "2026-09-10",
+      "still": "thumbs/dragon-flight-preview-stage.webp?v=1791963057719",
+      "poster": {
+        "bg": "#64515d",
+        "ink": "light",
+        "kind": "scene"
+      },
+      "stage": {
+        "viewport": [
+          1280,
+          800
+        ],
+        "rect": null,
+        "pageBg": null
+      },
       "slug": "dragon-flight-preview",
       "kind": "interactive",
       "url": "components/dragon-flight-preview/",
-      "thumb": "thumbs/dragon-flight-preview.png?v=1789056530501"
+      "thumb": "thumbs/dragon-flight-preview.webp?v=1791963057719"
     }
   ]
 }

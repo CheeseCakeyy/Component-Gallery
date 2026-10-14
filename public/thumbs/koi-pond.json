@@ -1,0 +1,17 @@
+{
+  "viewport": [
+    1280,
+    1040
+  ],
+  "show": ".pond-frame",
+  "rect": [
+    270,
+    139,
+    1010,
+    721
+  ],
+  "pageBg": "rgb(246, 242, 233)",
+  "bg": "#f5f1e8",
+  "ink": "dark",
+  "kind": "object"
+}

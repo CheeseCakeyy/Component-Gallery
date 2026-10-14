@@ -6,11 +6,11 @@
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "add": "node scripts/add.mjs",
+    "posters": "node scripts/posters.mjs",
     "sync": "node scripts/sync.mjs",
-    "thumbs": "node scripts/thumbs.mjs",
     "build": "node scripts/sync.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   }
 }

@@ -7,7 +7,13 @@
       "canvas"
     ],
     "date": "2026-09-26",
-    "focus": "82% 40%"
+    "poster": {
+      "hide": [
+        ".intro",
+        ".reading-light"
+      ],
+      "x": 0.78
+    }
   },
   "dragon-flight-preview": {
     "title": "Dragonflight",
@@ -17,7 +23,15 @@
       "pixel art",
       "vanilla JS"
     ],
-    "date": "2026-09-10"
+    "date": "2026-09-10",
+    "poster": {
+      "hide": [
+        "header",
+        ".badge",
+        ".bottom"
+      ],
+      "x": 0.52
+    }
   },
   "keyspace": {
     "title": "Keyspace",
@@ -26,7 +40,23 @@
     "tags": [
       "vanilla JS"
     ],
-    "date": "2026-09-28"
+    "date": "2026-09-28",
+    "poster": {
+      "scroll": 1300,
+      "hide": [
+        "header",
+        ".key-tracker",
+        "footer",
+        "#scroll-cue",
+        ".globe-copy",
+        ".globe-controls",
+        ".tiny-arrow"
+      ],
+      "x": 0.62,
+      "y": 0.48,
+      "zoom": 0.92,
+      "at": 0.64
+    }
   },
   "koi-pond": {
     "title": "Stillwater",
@@ -36,7 +66,16 @@
       "pixi",
       "react"
     ],
-    "date": "2026-09-23"
+    "date": "2026-09-23",
+    "show": ".pond-frame",
+    "viewport": [
+      1280,
+      1040
+    ],
+    "poster": {
+      "wait": 5000
+    },
+    "ready": ".pond-frame.is-ready"
   },
   "little-fizz": {
     "title": "Little Fizz",
@@ -46,7 +85,18 @@
       "WebGL"
     ],
     "date": "2026-09-27",
-    "focus": "50% 22%"
+    "poster": {
+      "hide": [
+        ".header",
+        "#intro",
+        "#puppy-label",
+        ".footer",
+        ".page-caption"
+      ],
+      "zoom": 1.12,
+      "y": 0.46,
+      "x": 0.56
+    }
   },
   "no-plan-calendar": {
     "title": "No Plan Society",
@@ -56,7 +106,8 @@
       "SVG",
       "vanilla JS"
     ],
-    "date": "2026-09-27"
+    "date": "2026-09-27",
+    "show": ".drawing-wrap"
   },
   "rain-mouse": {
     "title": "A little shelter",
@@ -66,7 +117,21 @@
       "video",
       "animation"
     ],
-    "date": "2026-09-28"
+    "date": "2026-09-28",
+    "show": "video",
+    "poster": {
+      "fill": true
+    },
+    "viewport": [
+      1280,
+      960
+    ],
+    "trim": [
+      0,
+      0,
+      0.13,
+      0
+    ]
   },
   "sea-of-fish": {
     "title": "A Sea of Small Lives",
@@ -76,7 +141,14 @@
       "canvas",
       "scroll"
     ],
-    "date": "2026-10-10"
+    "date": "2026-10-10",
+    "poster": {
+      "hide": [
+        ".overlay",
+        ".hint",
+        ".theme-toggle"
+      ]
+    }
   },
   "terracotta-water": {
     "title": "Layered Water Garden",
@@ -95,6 +167,13 @@
     "tags": [
       "three.js"
     ],
-    "date": "2026-10-13"
+    "date": "2026-10-13",
+    "poster": {
+      "hide": [
+        "header.top",
+        "#caption"
+      ],
+      "bg": "#141414"
+    }
   }
 }

@@ -8,18 +8,18 @@ const room = $('#room');
 const track = $('#track');
 const panel = $('#panel');
 const stage = $('#stage');
-const stageImg = $('#stage-img');
+const stagePoster = $('#stage-poster');
+const stageStill = $('#stage-still');
 const viewer = $('#viewer');
 let viewerFrame = $('#viewer-frame');
 const viewerLoading = $('#viewer-loading');
 const indexPanel = $('#index-panel');
 
-const PREVIEW_W = 1280;
 const NEW_FOR_DAYS = 21;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const OPEN_MS = reduceMotion ? 1 : 820;
-const CLOSE_MS = reduceMotion ? 1 : 620;
-const EASE = 'cubic-bezier(.68, 0, .18, 1)';
+const OPEN_MS = reduceMotion ? 1 : 720;
+const CLOSE_MS = reduceMotion ? 1 : 540;
+const SHOW_PAD = 0.06; // must match scripts/posters.mjs, so the live view lines up with the still
 
 // ── Data ────────────────────────────────────────────────
 let items = [];
@@ -73,25 +73,29 @@ function measure() {
   for (const [k, v] of Object.entries({ cw, ch, gap, top, 'desk-w': deskW, edge })) root.style.setProperty(`--${k}`, `${v}px`);
 }
 
-// Where the open panel goes, and how far the neighbours must step aside.
-function panelGeometry() {
+// Where the open panel goes, and how far the neighbours must step aside. A piece that only
+// shows one element ("show" in components.json) gets a stage shaped like that element.
+const stageAspect = (item) => (item.show && item.stage?.rect ? item.stage.rect[2] / item.stage.rect[3] : 1.6);
+
+function panelGeometry(item) {
   const { W, H, portrait, cw, ch, gap, top } = G;
+  const aspect = stageAspect(item);
   if (portrait) {
-    const sw = W - 2 * G.edge, sh = sw / 1.6;
+    const sw = Math.min(W - 2 * G.edge, H * 0.42 * aspect), sh = sw / aspect;
     const stageTop = top + ch * 0.2;
     return {
-      stage: { left: G.edge, top: stageTop, width: sw, height: sh },
+      stage: { left: (W - sw) / 2, top: stageTop, width: sw, height: sh },
       title: { left: G.edge, right: 'auto', bottom: H - stageTop + 6 },
-      side: { left: G.edge, top: stageTop + sh + 16, width: sw },
+      side: { left: G.edge, top: stageTop + sh + 16, width: W - 2 * G.edge },
       dL: -W * 0.75, dR: W * 0.75,
     };
   }
-  const sw = Math.min(cw * 2.2, W * 0.52), sh = sw / 1.6;
+  const sw = Math.min(cw * 2.2, W * 0.52, ch * 1.04 * aspect), sh = sw / aspect;
   const lw = cw * 0.92, inner = cw * 0.16;
   const pw = lw + inner + sw;
   const panelLeft = W / 2 - pw / 2 - cw * 0.1;
   const stageLeft = panelLeft + lw + inner;
-  const stageTop = top + (ch - sh) / 2 + ch * 0.07;
+  const stageTop = Math.min(top + (ch - sh) / 2 + ch * 0.07, top + ch * 1.05 - sh);
   const panelRight = stageLeft + sw;
   return {
     stage: { left: stageLeft, top: stageTop, width: sw, height: sh },
@@ -134,6 +138,10 @@ function makeCard(item, copy) {
   if (copy) { el.tabIndex = -1; el.setAttribute('aria-hidden', 'true'); }
   el.setAttribute('aria-label', `${item.title}${item.subtitle ? ', ' + item.subtitle : ''}. Open on the wall`);
   el.style.setProperty('--h', hue(item.slug));
+  // the card is printed in the poster's own colour, so the picture has no visible edge
+  if (item.poster?.bg) el.style.setProperty('--poster-bg', item.poster.bg);
+  el.dataset.ink = item.poster?.ink || 'auto';
+  el.dataset.kind = item.poster?.kind || 'scene';
   el.innerHTML = `
     <span class="card-inner">
       ${item.thumb ? `<img alt="" draggable="false" decoding="async">` : ''}
@@ -143,11 +151,12 @@ function makeCard(item, copy) {
       ${isNew(item) ? '<span class="new-dot">New</span>' : ''}
     </span>`;
   const img = el.querySelector('img');
-  if (img) { img.src = item.thumb; if (item.focus) img.style.objectPosition = item.focus; }
+  if (img) img.src = item.thumb;
   el.querySelector('.card-title').textContent = item.title;
   el.querySelector('.card-sub').textContent = item.subtitle || item.tags[0] || '';
   el.querySelector('.card-num').textContent = `No. ${pad(numberOf.get(item.slug))}`;
-  el.addEventListener('focus', () => { if (!dragging) ensureVisible(+el.dataset.v); });
+  // only keyboard focus scrolls a card into view; a mouse click must not move the wall under it
+  el.addEventListener('focus', () => { if (!dragging && el.matches(':focus-visible')) ensureVisible(+el.dataset.v); });
   return el;
 }
 
@@ -159,23 +168,26 @@ const baseX = (v, off = offset) => G.left0 + mod(v * G.p - off + G.p, L) - G.p;
 let offset = 0, target = 0;
 let shiftL = 0, shiftR = 0, shiftLT = 0, shiftRT = 0;
 let openV = -1;
-let rafId = 0, lastT = 0;
-let settleWaiters = [];
+let rafId = 0, lastT = 0, moving = false;
 
 function kick() { if (!rafId) { lastT = performance.now(); rafId = requestAnimationFrame(tick); } }
 
 function tick(t) {
   const dt = Math.min(64, t - lastT); lastT = t;
-  const k = reduceMotion ? 1 : 1 - Math.exp(-dt / 105);
-  const ks = reduceMotion ? 1 : 1 - Math.exp(-dt / 140);
+  const k = reduceMotion ? 1 : 1 - Math.exp(-dt / 85);
+  const ks = reduceMotion ? 1 : 1 - Math.exp(-dt / 120);
   if (!dragging) offset += (target - offset) * k;
   shiftL += (shiftLT - shiftL) * ks;
   shiftR += (shiftRT - shiftR) * ks;
   layout();
+  // While the wall slides, hover effects are off. Otherwise every card that passes under a
+  // resting cursor starts (and abandons) its hover animation, which reads as stutter.
+  const nowMoving = dragging || Math.abs(target - offset) > 0.5;
+  if (nowMoving !== moving) { moving = nowMoving; track.classList.toggle('is-moving', moving); }
   const still = Math.abs(target - offset) < 0.3 && Math.abs(shiftLT - shiftL) < 0.3 && Math.abs(shiftRT - shiftR) < 0.3;
-  if (Math.abs(target - offset) < 0.6) { settleWaiters.forEach((r) => r()); settleWaiters = []; }
   if (still && !dragging) {
     offset = target; shiftL = shiftLT; shiftR = shiftRT; layout();
+    if (moving) { moving = false; track.classList.remove('is-moving'); }
     rafId = 0; return;
   }
   rafId = requestAnimationFrame(tick);
@@ -193,11 +205,6 @@ function layout() {
   }
 }
 
-function settle() {
-  if (Math.abs(target - offset) < 0.6) return Promise.resolve();
-  return new Promise((resolve) => { settleWaiters.push(resolve); setTimeout(resolve, 1100); });
-}
-
 // nearest scroll offset that puts slot v at x
 function offsetFor(v, x) {
   const raw = v * G.p - (x - G.left0);
@@ -208,116 +215,251 @@ const centerOn = (v) => offsetFor(v, G.W / 2 - G.cw / 2);
 
 function ensureVisible(v) {
   const x = baseX(v, target);
-  if (x < G.edge * 0.5 || x + G.cw > G.W - G.edge * 0.5) { target = offsetFor(v, G.portrait ? G.left0 : G.left0); kick(); }
+  if (x < G.edge * 0.5 || x + G.cw > G.W - G.edge * 0.5) { target = offsetFor(v, G.left0); kick(); }
 }
 
 // ── Opening a card ──────────────────────────────────────
+// The wall slides the card to the middle while the card grows into the stage, both at once.
+// The stage shows a still of exactly what the live view will show (made by npm run posters).
+// The live component only starts once the motion is over, because booting a WebGL page blocks
+// the browser for a moment and would otherwise land in the middle of the animation.
 let opId = 0;
 let stageFrame = null;
-let stageAnim = null;
+let stageMotion = null;
+let closing = null;
 
 const rectOf = (el) => { const r = el.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; };
 const px = (r) => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, typeof v === 'number' ? `${v}px` : v]));
 
+function bezier(x1, y1, x2, y2) {
+  const c = (a, b, t) => ((1 - 3 * b + 3 * a) * t + (3 * b - 6 * a)) * t * t + 3 * a * t;
+  return (x) => {
+    let t = x;
+    for (let i = 0; i < 6; i++) {
+      const d = 3 * (1 - 3 * x2 + 3 * x1) * t * t + 2 * (3 * x2 - 6 * x1) * t + 3 * x1;
+      if (Math.abs(d) < 1e-6) break;
+      t -= (c(x1, x2, t) - x) / d;
+    }
+    return c(y1, y2, Math.min(1, Math.max(0, t)));
+  };
+}
+// moves straight away and settles gently (no slow start, so no "pause" before it opens)
+const ease = bezier(0.2, 0.8, 0.2, 1);
+
+// Moves the stage between two boxes. `to` may be a function, so a closing stage can follow a
+// card that is still sliding along the wall.
+function moveStage(from, to, ms) {
+  stageMotion?.cancel();
+  let cancelled = false, finish;
+  const done = new Promise((r) => { finish = r; });
+  const t0 = performance.now();
+  const frame = (now) => {
+    if (cancelled) return finish(false);
+    const p = ms <= 1 ? 1 : Math.min(1, (now - t0) / ms);
+    const e = ease(p);
+    const b = typeof to === 'function' ? to() : to;
+    stage.style.left = `${from.left + (b.left - from.left) * e}px`;
+    stage.style.top = `${from.top + (b.top - from.top) * e}px`;
+    stage.style.width = `${from.width + (b.width - from.width) * e}px`;
+    stage.style.height = `${from.height + (b.height - from.height) * e}px`;
+    if (p < 1) requestAnimationFrame(frame);
+    else { stageMotion = null; finish(true); }
+  };
+  requestAnimationFrame(frame);
+  stageMotion = { cancel() { cancelled = true; } };
+  return done;
+}
+
 async function open(v) {
-  if (v === openV || !slots[v]) return;
+  if (!slots[v] || (v === openV && !closing)) return;
+  warming?.();
   hideHint();
-  if (openV >= 0) await close({ fast: true });
-  const id = ++opId; // taken after closing, so a newer open() or close() cancels this one
-
-  target = centerOn(v); kick();
-  await settle();
-  if (id !== opId) return;
-
+  if (openV >= 0 || closing) await close({ fast: true });
+  const id = ++opId;
   const { item, el } = slots[v];
-  openV = v;
-  const g = panelGeometry();
+  const g = panelGeometry(item);
   const from = rectOf(el);
 
-  fillLabels(item);
-  stage.classList.remove('is-wide', 'live');
-  stageImg.src = item.thumb || '';
-  stageImg.style.objectPosition = item.focus || '';
-  Object.assign(stage.style, px(from), { visibility: 'visible' });
-  stageFrame?.remove();
-  stageFrame = makeStageFrame(item, g.stage.width);
+  openV = v;
+  target = centerOn(v);
+  shiftLT = g.dL; shiftRT = g.dR;
+  kick();
 
-  const viaKeyboard = document.activeElement?.classList.contains('card');
+  fillLabels(item);
+  placeLabels(g);
+  stage.dataset.kind = item.poster?.kind || 'scene';
+  stage.classList.remove('is-wide', 'live');
+  stagePoster.src = item.thumb || '';
+  stageStill.src = item.still || item.thumb || '';
+  Object.assign(stage.style, px(from), { visibility: 'visible' });
+  stageFrame?.remove(); stageFrame = null;
+
+  const viaKeyboard = !!document.activeElement?.matches?.('.card:focus-visible');
   el.classList.add('is-open');
   room.classList.add('has-open');
   panel.classList.add('is-open');
   panel.setAttribute('aria-hidden', 'false');
-  shiftLT = g.dL; shiftRT = g.dR; kick();
-  placeLabels(g);
-
-  stageAnim?.cancel();
-  void stage.offsetWidth;
+  void stage.offsetWidth; // start the mask and crossfade from the card's look
   stage.classList.add('is-wide');
-  stageAnim = stage.animate([px(from), px(g.stage)], { duration: OPEN_MS, easing: EASE, fill: 'forwards' });
   setTimeout(() => {
     if (id !== opId) return;
     panel.classList.add('show-labels');
     if (viaKeyboard) $('#panel-open').focus({ preventScroll: true });
-  }, OPEN_MS * 0.45);
-  try { await stageAnim.finished; } catch { return; }
-  if (id !== opId) return;
-  Object.assign(stage.style, px(g.stage));
-  stageAnim.cancel(); stageAnim = null;
-  stage.dataset.settled = '1';
-  revealFrame();
+  }, OPEN_MS * 0.3);
+
+  if (!(await moveStage(from, g.stage, OPEN_MS)) || id !== opId) return;
+  setTimeout(() => { if (id === opId) startFrame(item, g.stage); }, 60);
 }
 
-async function close({ fast = false } = {}) {
-  if (openV < 0) return;
-  const id = ++opId;
-  const v = openV;
-  const { el } = slots[v];
-  const hadFocus = panel.contains(document.activeElement);
-  panel.classList.remove('show-labels');
-  room.classList.remove('has-open');
-  stage.classList.remove('live');
-  stageFrame?.classList.remove('ready');
-  if (hadFocus) el.focus({ preventScroll: true });
-  delete stage.dataset.settled;
-  shiftLT = 0; shiftRT = 0; kick();
+function close({ fast = false } = {}) {
+  if (closing) return closing;
+  if (openV < 0) return Promise.resolve();
+  closing = (async () => {
+    const id = ++opId;
+    const v = openV;
+    const { el } = slots[v];
+    const hadFocus = panel.contains(document.activeElement);
+    panel.classList.remove('show-labels');
+    room.classList.remove('has-open');
+    stage.classList.remove('live', 'is-wide');
+    stageFrame?.remove(); stageFrame = null;
+    if (hadFocus) el.focus({ preventScroll: true });
+    shiftLT = 0; shiftRT = 0; kick();
 
-  const from = rectOf(stage);
-  const to = rectOf(el);
-  stage.classList.remove('is-wide');
-  stageAnim?.cancel();
-  stageAnim = stage.animate([px(from), px(to)], { duration: fast ? CLOSE_MS * 0.55 : CLOSE_MS, easing: EASE, fill: 'forwards' });
-  setTimeout(() => el.classList.remove('is-open'), (fast ? CLOSE_MS * 0.55 : CLOSE_MS) * 0.55);
-  try { await stageAnim.finished; } catch {}
-  stageFrame?.remove(); stageFrame = null;
-  if (openV === v) openV = -1;
-  if (id === opId || fast) {
-    stage.style.visibility = 'hidden';
-    stageAnim?.cancel(); stageAnim = null;
-    panel.classList.remove('is-open');
-    panel.setAttribute('aria-hidden', 'true');
-  }
-  el.classList.remove('is-open');
-  layout();
+    const ms = fast ? CLOSE_MS * 0.6 : CLOSE_MS;
+    setTimeout(() => el.classList.remove('is-open'), ms * 0.5);
+    await moveStage(rectOf(stage), () => rectOf(el), ms);
+    el.classList.remove('is-open');
+    if (openV === v) openV = -1;
+    if (id === opId) {
+      stage.style.visibility = 'hidden';
+      panel.classList.remove('is-open');
+      panel.setAttribute('aria-hidden', 'true');
+    }
+    layout();
+  })().finally(() => { closing = null; });
+  return closing;
 }
 
-function makeStageFrame(item, width) {
+// Starts the live component inside the stage, invisible, and fades it in over the still once
+// it has painted. A "show" piece is cropped to its element exactly the way the still was.
+function startFrame(item, box) {
   const f = document.createElement('iframe');
   f.title = item.title;
   f.setAttribute('allow', 'autoplay; fullscreen');
-  f.style.setProperty('--s', width / PREVIEW_W);
-  f.addEventListener('load', () => { f.dataset.loaded = '1'; revealFrame(); });
+  const [vw, vh] = item.stage?.viewport || [1280, 800];
+  f.style.width = `${vw}px`;
+  f.style.height = `${vh}px`;
+  f.rect = item.show && item.stage?.rect ? item.stage.rect : [0, 0, vw, vh];
+  fitFrame(f, box);
+  f.addEventListener('load', async () => {
+    if (item.show) {
+      const r = await isolateInFrame(f, item);
+      if (r && stageFrame === f) { f.rect = trimRect(r, item.trim); fitFrame(f, rectOf(stage)); }
+    }
+    // some pieces show a loading state first; keep the still up until they say they're ready
+    if (item.ready) await waitInFrame(f, item.ready, 10000);
+    // let the page paint a few real frames before it replaces the still
+    setTimeout(() => {
+      if (stageFrame !== f) return;
+      f.classList.add('ready');
+      stage.classList.add('live');
+    }, item.show ? 120 : 320);
+  }, { once: true });
   f.src = item.url;
   stage.append(f);
-  return f;
+  stageFrame = f;
 }
 
-function revealFrame() {
-  if (!stageFrame?.dataset.loaded || !stage.dataset.settled) return;
-  setTimeout(() => {
-    if (!stageFrame) return;
-    stageFrame.classList.add('ready');
-    stage.classList.add('live');
-  }, 250);
+const trimRect = ([x, y, w, h], t) => (t ? [x + w * t[0], y + h * t[1], w * (1 - t[0] - t[2]), h * (1 - t[1] - t[3])] : [x, y, w, h]);
+
+function waitInFrame(f, sel, ms) {
+  return new Promise((resolve) => {
+    const t0 = performance.now();
+    (function poll() {
+      let found = false;
+      try { found = !!f.contentDocument?.querySelector(sel); } catch {}
+      if (found || stageFrame !== f || performance.now() - t0 > ms) return resolve(found);
+      setTimeout(poll, 80);
+    })();
+  });
+}
+
+function fitFrame(f, box) {
+  const [x, y, w, h] = f.rect;
+  const s = Math.min(box.width / w, box.height / h);
+  const tx = (box.width - w * s) / 2 - x * s, ty = (box.height - h * s) / 2 - y * s;
+  f.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+}
+
+// Same trick as scripts/posters.mjs: hide everything but the element, keep the page colour.
+function isolateInFrame(f, item) {
+  return new Promise((resolve) => {
+    let doc;
+    try { doc = f.contentDocument; } catch { return resolve(null); }
+    if (!doc) return resolve(null);
+    const sel = item.show, bg = item.stage?.pageBg;
+    const t0 = performance.now();
+    (function find() {
+      const el = doc.querySelector(sel);
+      if (!el) return performance.now() - t0 > 6000 ? resolve(null) : setTimeout(find, 60);
+      const style = doc.createElement('style');
+      style.textContent = `html{background:${bg || 'transparent'} !important;overflow:hidden !important}
+        body{background:transparent !important}
+        body *{visibility:hidden !important}
+        ${sel},${sel} *{visibility:visible !important}`;
+      doc.head.append(style);
+      f.contentWindow.requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect();
+        const pad = bg ? SHOW_PAD * Math.max(r.width, r.height) : 0;
+        const vw = f.contentWindow.innerWidth, vh = f.contentWindow.innerHeight;
+        const x = Math.max(0, r.left - pad), y = Math.max(0, r.top - pad);
+        resolve([x, y, Math.min(vw, r.right + pad) - x, Math.min(vh, r.bottom + pad) - y]);
+      });
+    })();
+  });
+}
+
+// Decode every still up front, so opening a card never waits on an image. Then rehearse an
+// open once, invisibly: the first time the browser draws the stage and its labels it has to set
+// up their layers, which otherwise costs a visible hitch on the first card you click.
+const stillCache = [];
+let warming = null;
+(window.requestIdleCallback || ((fn) => setTimeout(fn, 400)))(() => {
+  for (const item of items) {
+    if (!item.still) continue;
+    const im = new Image();
+    im.decoding = 'async';
+    im.src = item.still;
+    im.decode?.().catch(() => {});
+    stillCache.push(im);
+  }
+  warmUp();
+});
+
+function warmUp() {
+  if (!items.length || openV >= 0 || closing) return;
+  const first = items[0];
+  stagePoster.src = first.thumb || '';
+  stageStill.src = first.still || '';
+  fillLabels(first);
+  placeLabels(panelGeometry(first));
+  panel.style.opacity = '0.01';
+  Object.assign(stage.style, px(panelGeometry(first).stage), { visibility: 'visible' });
+  stage.classList.add('is-wide');
+  panel.classList.add('is-open', 'show-labels');
+  const end = () => {
+    if (warming !== end) return;
+    warming = null;
+    stage.classList.remove('is-wide');
+    if (openV < 0) {
+      panel.classList.remove('is-open', 'show-labels');
+      stage.style.visibility = 'hidden';
+    }
+    panel.style.opacity = '';
+  };
+  warming = end;
+  requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(end, 250)));
 }
 
 function fillLabels(item) {
@@ -337,12 +479,12 @@ function placeLabels(g) {
 // keep an open panel in place when the window changes size
 function relayoutOpen() {
   if (openV < 0) return;
-  const g = panelGeometry();
+  const g = panelGeometry(slots[openV].item);
   offset = target = centerOn(openV);
   shiftL = shiftLT = g.dL; shiftR = shiftRT = g.dR;
-  stageAnim?.cancel(); stageAnim = null;
+  stageMotion?.cancel(); stageMotion = null;
   Object.assign(stage.style, px(g.stage));
-  stageFrame?.style.setProperty('--s', g.stage.width / PREVIEW_W);
+  if (stageFrame) fitFrame(stageFrame, g.stage);
   placeLabels(g);
   layout();
 }
@@ -354,11 +496,12 @@ $('#panel-open').addEventListener('click', () => {
 });
 
 // ── Input: drag, wheel, keys ────────────────────────────
-let dragging = false, pointer = null, suppressClick = false;
+let dragging = false, pointer = null, suppressClick = false, pressedCard = null;
 
 track.addEventListener('pointerdown', (e) => {
   if (e.button !== 0) return;
   pointer = { id: e.pointerId, x0: e.clientX, off0: target, lastX: e.clientX, lastT: e.timeStamp, vel: 0, moved: false };
+  pressedCard = e.target.closest('.card');
 });
 addEventListener('pointermove', (e) => {
   if (!pointer || e.pointerId !== pointer.id) return;
@@ -382,6 +525,7 @@ const endDrag = (e) => {
   if (pointer.moved) {
     suppressClick = true;
     setTimeout(() => { suppressClick = false; }, 0);
+    // a flick carries on, then comes to rest on a card
     target = snap(offset - pointer.vel * 260);
     kick();
   }
@@ -393,25 +537,27 @@ addEventListener('pointercancel', endDrag);
 
 track.addEventListener('click', (e) => {
   if (suppressClick) { e.preventDefault(); e.stopPropagation(); return; }
-  const card = e.target.closest('.card');
+  // if the wall was still gliding, the card may have slid out from under the pointer between
+  // press and release, so fall back to the card the press started on
+  const card = e.target.closest('.card') || (e.detail ? pressedCard : null);
+  pressedCard = null;
   if (card) open(+card.dataset.v);
   else if (openV >= 0) close();
 });
 
-let wheelTimer = 0;
+// Wheel and trackpad move the wall freely, 1:1, and it stays where you leave it. (Snapping back
+// to the nearest card afterwards is what made small scrolls feel like they were being dragged.)
 room.addEventListener('wheel', (e) => {
   if (e.ctrlKey) return;
   if (e.target.closest('.index-panel')) return;
   e.preventDefault();
   const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
   const delta = d * (e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? G.W : 1);
-  if (Math.abs(delta) < 1) return;
+  if (!delta) return;
   if (openV >= 0) close();
   hideHint();
   target += delta;
   kick();
-  clearTimeout(wheelTimer);
-  wheelTimer = setTimeout(() => { target = snap(target); kick(); }, 140);
 }, { passive: false });
 
 addEventListener('keydown', (e) => {
@@ -522,7 +668,7 @@ function closeViewerUI() {
   viewer.hidden = true;
   document.title = 'Random Components';
   setViewerFrame(null);
-  if (openV >= 0 && !stageFrame) stageFrame = makeStageFrame(slots[openV].item, panelGeometry().stage.width);
+  if (openV >= 0 && !stageFrame && !closing) startFrame(slots[openV].item, rectOf(stage));
   (openV >= 0 ? $('#panel-open') : null)?.focus({ preventScroll: true });
 }
 
@@ -564,7 +710,7 @@ function setup() {
   if (buildTrack() && openV >= 0) {
     // the loop was rebuilt underneath an open card: drop the panel without animating
     opId++; openV = -1; shiftL = shiftLT = shiftR = shiftRT = 0;
-    stageAnim?.cancel(); stageAnim = null; stageFrame?.remove(); stageFrame = null;
+    stageMotion?.cancel(); stageMotion = null; stageFrame?.remove(); stageFrame = null;
     stage.style.visibility = 'hidden'; stage.classList.remove('is-wide', 'live');
     panel.classList.remove('is-open', 'show-labels');
     room.classList.remove('has-open');

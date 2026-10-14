@@ -30,6 +30,14 @@
   --sans: 'Outfit', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   color-scheme: light;
 }
+.card-inner::after {
+  content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: rgb(10 10 12 / var(--dim, 0)); transition: opacity .35s;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --dim: .16; }
+}
+:root[data-theme="dark"] { --dim: .16; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --wall-a: #2a2b2f; --wall-b: #151618; --dot: rgb(255 255 255 / .05);
@@ -129,16 +137,26 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round
   width: var(--cw); height: var(--ch);
   will-change: transform;
   outline: none;
+  --c-ink: var(--ink); --c-ink-2: var(--ink-2); --c-dot: var(--card-dot);
 }
+/* each card is printed in its poster's colour (measured by npm run posters) */
+.card[data-ink="dark"] { --c-ink: #26272b; --c-ink-2: rgb(38 39 43 / .62); --c-dot: rgb(0 0 0 / .06); }
+.card[data-ink="light"] { --c-ink: #f7f4ef; --c-ink-2: rgb(247 244 239 / .72); --c-dot: rgb(255 255 255 / .07); }
 .card-inner {
   position: absolute; inset: 0; overflow: hidden;
-  background:
-    radial-gradient(circle, var(--card-dot) .7px, transparent 1.1px) 0 0 / 6px 6px,
-    var(--card);
+  background: var(--poster-bg, var(--card));
   box-shadow: var(--card-shadow);
   transition: transform .5s cubic-bezier(.2, .7, .2, 1), box-shadow .5s, opacity .45s, background-color .45s;
 }
-.card:hover .card-inner { transform: translateY(-5px); }
+/* paper grain across the top of the poster, where the title sits */
+.card-inner::before {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(circle, var(--c-dot) .7px, transparent 1.1px) 0 0 / 6px 6px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 28%, transparent 52%);
+          mask-image: linear-gradient(to bottom, #000 28%, transparent 52%);
+  transition: opacity .35s;
+}
+.track:not(.is-moving) .card:hover .card-inner { transform: translateY(-5px); }
 .card:focus-visible { outline: none; }
 .card:focus-visible .card-inner { outline: 1.5px solid var(--ink-3); outline-offset: 6px; }
 .card img {
@@ -148,20 +166,23 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round
   pointer-events: none;
   transition: transform 1.2s cubic-bezier(.2, .7, .2, 1), opacity .4s;
 }
-.card:hover img { transform: scale(1.04); }
+/* an "object" poster is already composed on the card's colour, so it needs no fade */
+.card[data-kind="object"] img { -webkit-mask-image: none; mask-image: none; }
+/* hover effects pause while the wall slides, so they don't flicker on and off under the cursor */
+.track:not(.is-moving) .card:hover img { transform: scale(1.04); }
 .card-text {
-  position: absolute; left: 8%; right: 8%; top: 13.5%; text-align: center;
+  position: absolute; z-index: 2; left: 8%; right: 8%; top: 13.5%; text-align: center;
   transition: opacity .3s;
 }
 .card-title {
   display: block;
   margin: 0; font-weight: 300; font-size: calc(var(--cw) * .078); line-height: 1.12; letter-spacing: -.005em;
-  color: var(--ink);
+  color: var(--c-ink);
 }
 .card-sub {
-  display: block; margin: calc(var(--cw) * .018) 0 0; font-size: calc(var(--cw) * .043); color: var(--ink-2); font-weight: 300; }
+  display: block; margin: calc(var(--cw) * .018) 0 0; font-size: calc(var(--cw) * .043); color: var(--c-ink-2); font-weight: 300; }
 .orb {
-  position: absolute; left: 13%; bottom: 8.5%; width: calc(var(--cw) * .13); aspect-ratio: 1; border-radius: 50%;
+  position: absolute; z-index: 2; left: 13%; bottom: 8.5%; width: calc(var(--cw) * .13); aspect-ratio: 1; border-radius: 50%;
   background:
     radial-gradient(circle at 34% 30%, rgb(255 255 255 / .5), transparent 30%),
     radial-gradient(circle at 70% 75%, hsl(calc(var(--h) + 30) 95% 55% / .9), transparent 45%),
@@ -171,24 +192,27 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round
   transition: opacity .3s, transform .4s;
 }
 .card-num {
-  position: absolute; right: 9%; bottom: 9%; font-size: calc(var(--cw) * .036); color: #fff;
+  position: absolute; z-index: 2; right: 9%; bottom: 9%; font-size: calc(var(--cw) * .036); color: #fff;
   opacity: 0; transition: opacity .3s; text-shadow: 0 1px 3px rgb(0 0 0 / .5); font-variant-numeric: tabular-nums;
 }
-.card:hover .card-num { opacity: .9; }
+.track:not(.is-moving) .card:hover .card-num { opacity: .9; }
 .new-dot {
-  position: absolute; right: 8%; top: 6.5%; padding: 3px 7px; border-radius: 999px;
+  position: absolute; z-index: 2; right: 8%; top: 6.5%; padding: 3px 7px; border-radius: 999px;
   background: var(--plus); color: #fff; font-size: calc(var(--cw) * .03); font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
 }
 
 /* while a card is open its frame dissolves and the panel takes over */
-.card.is-open .card-inner { background-color: transparent; box-shadow: none; background-image: none; }
+.card.is-open .card-inner { background: transparent; box-shadow: none; }
+.card.is-open .card-inner::before, .card.is-open .card-inner::after,
 .card.is-open .card-text, .card.is-open .orb, .card.is-open .new-dot { opacity: 0; }
 .card.is-open img { opacity: 0; transition-delay: .05s; }
 
 /* ── Open panel ───────────────────────────────────────── */
 .panel { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
 .panel.is-open .stage, .panel.is-open .panel-side, .panel.is-open .panel-title { pointer-events: auto; }
-/* The stage starts with exactly the card's top fade, then its edges soften into the wall. */
+/* The stage starts with exactly the card's top fade, then its edges soften into the wall.
+   Its first picture is the poster; the still of the opened view fades in over it as it grows,
+   and the live component fades in over the still once it has painted. */
 @property --t0 { syntax: '<percentage>'; inherits: false; initial-value: 29%; }
 @property --t1 { syntax: '<percentage>'; inherits: false; initial-value: 62%; }
 @property --b1 { syntax: '<percentage>'; inherits: false; initial-value: 100%; }
@@ -204,18 +228,23 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round
     linear-gradient(to right, transparent, #000 var(--x1), #000 calc(100% - var(--x1)), transparent);
   -webkit-mask-composite: source-in;
           mask-composite: intersect;
-  transition: --t0 .8s cubic-bezier(.68, 0, .18, 1), --t1 .8s cubic-bezier(.68, 0, .18, 1), --b1 .8s cubic-bezier(.68, 0, .18, 1), --x1 .8s cubic-bezier(.68, 0, .18, 1);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  transition: --t0 .72s var(--ease), --t1 .72s var(--ease), --b1 .72s var(--ease), --x1 .72s var(--ease);
 }
+.stage[data-kind="object"] { --t0: 0%; --t1: 0%; }
 .stage.is-wide { --t0: 0%; --t1: 11%; --b1: 89%; --x1: 6%; }
-.stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .6s; }
+.stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.stage-poster { opacity: 1; transition: opacity 0s; }
+.stage.is-wide .stage-poster { opacity: 0; transition: opacity 0s .6s; }
+.stage-still { opacity: 0; transition: opacity .4s ease; }
+.stage.is-wide .stage-still { opacity: 1; transition: opacity .48s ease .04s; }
 .stage iframe {
-  position: absolute; left: 0; top: 0; width: 1280px; height: 800px; border: 0;
-  transform-origin: 0 0; transform: scale(var(--s, .5));
-  opacity: 0; transition: opacity .7s ease;
+  position: absolute; left: 0; top: 0; border: 0;
+  transform-origin: 0 0;
+  opacity: 0; transition: opacity .45s ease;
   background: transparent;
 }
 .stage iframe.ready { opacity: 1; }
-.stage.live img { opacity: 0; }
 
 .panel-title, .panel-side { position: absolute; opacity: 0; transform: translateY(10px); transition: opacity .45s, transform .6s cubic-bezier(.2, .7, .2, 1); }
 .panel.show-labels .panel-title, .panel.show-labels .panel-side { opacity: 1; transform: none; }

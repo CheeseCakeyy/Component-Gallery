@@ -1,0 +1,17 @@
+{
+  "viewport": [
+    1280,
+    960
+  ],
+  "show": "video",
+  "rect": [
+    272,
+    20,
+    640,
+    920
+  ],
+  "pageBg": null,
+  "bg": "#e8e8e8",
+  "ink": "dark",
+  "kind": "scene"
+}

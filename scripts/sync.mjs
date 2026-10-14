@@ -37,13 +37,27 @@ function stubFor(slug) {
   return { title: pageTitle || titleFromSlug(slug), description: '', tags: [], date: today() };
 }
 
+const versioned = (file) => `${path.relative(PUBLIC_DIR, file).split(path.sep).join('/')}?v=${Math.round(fs.statSync(file).mtimeMs)}`;
+
 function findThumb(slug, override) {
   if (override && fs.existsSync(path.join(PUBLIC_DIR, override))) return override;
   for (const ext of THUMB_EXTS) {
     const file = path.join(THUMBS_DIR, slug + ext);
-    if (fs.existsSync(file)) return `thumbs/${slug}${ext}?v=${Math.round(fs.statSync(file).mtimeMs)}`;
+    if (fs.existsSync(file)) return versioned(file);
   }
   return null;
+}
+
+// What `npm run posters` measured: the poster's colour and where the "show" element sits.
+function artwork(slug) {
+  const metaFile = path.join(THUMBS_DIR, `${slug}.json`);
+  const stillFile = path.join(THUMBS_DIR, `${slug}-stage.webp`);
+  const meta = fs.existsSync(metaFile) ? JSON.parse(fs.readFileSync(metaFile, 'utf8')) : null;
+  return {
+    still: fs.existsSync(stillFile) ? versioned(stillFile) : null,
+    poster: meta && { bg: meta.bg, ink: meta.ink, kind: meta.kind },
+    stage: meta && { viewport: meta.viewport, rect: meta.rect || null, pageBg: meta.pageBg || null },
+  };
 }
 
 export async function sync({ quiet = false } = {}) {
@@ -61,8 +75,10 @@ export async function sync({ quiet = false } = {}) {
     .filter((slug) => !content[slug].hidden)
     .map((slug) => {
       const c = content[slug];
+      const { poster: _p, ...rest } = c;
       return {
-        ...c,
+        ...rest,
+        ...artwork(slug),
         slug,
         title: c.title || titleFromSlug(slug),
         description: c.description || '',
@@ -83,7 +99,7 @@ export async function sync({ quiet = false } = {}) {
   for (const slug of added) console.log(`  + new: ${slug} (stub added to components.json, so add its text there)`);
   for (const slug of missing) console.log(`  ! ${slug} is in components.json but public/components/${slug}/ has no index.html`);
   const noThumb = items.filter((i) => !i.thumb).map((i) => i.slug);
-  if (noThumb.length) log(`  · no thumbnail yet: ${noThumb.join(', ')} (run npm run thumbs)`);
+  if (noThumb.length) log(`  · no poster yet: ${noThumb.join(', ')} (run npm run posters)`);
   const noText = items.filter((i) => !i.description).map((i) => i.slug);
   if (noText.length) log(`  · no description yet: ${noText.join(', ')}`);
   return { items, added, missing };

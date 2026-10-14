@@ -1,0 +1,17 @@
+{
+  "viewport": [
+    1280,
+    800
+  ],
+  "show": ".drawing-wrap",
+  "rect": [
+    377,
+    357,
+    526,
+    363
+  ],
+  "pageBg": "rgb(248, 247, 243)",
+  "bg": "#f8f7f3",
+  "ink": "dark",
+  "kind": "object"
+}
